@@ -1,0 +1,26 @@
+
+{
+	"scripts": {
+		"start": "concurrently \"pnpm --prefix backend start\" \"pnpm --prefix frontend start\"",
+		"lint": "eslint '*/**/*.{js,ts,tsx}'",
+		"format": "prettier --write '*/**/*.{js,ts,tsx,json,css,md}'"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.{js,ts,tsx}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{json,css,md}": [
+			"prettier --write"
+		]
+	},
+	"prettier": {
+		"singleQuote": true,
+		"trailingComma": "all"
+	}
+}
