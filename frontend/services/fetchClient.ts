@@ -34,7 +34,6 @@ export async function fetchClient<T = unknown>(
     throw new Error(errorMsg);
   }
 
-  // If 204 (No Content), you might not have a response body
   if (response.status === 204) {
     return {   } as T;
   }
