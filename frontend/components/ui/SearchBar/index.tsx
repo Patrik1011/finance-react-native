@@ -15,14 +15,14 @@ type SearchBarProps = {
 };
 
 export const SearchBar = ({
-                            value,
-                            onChange,
-                            placeholder = 'Search...',
-                            variant = 'outline',
-                            size = 'md',
-                            disabled = false,
-                            className,
-                          }: SearchBarProps) => {
+  value,
+  onChange,
+  placeholder = 'Search...',
+  variant = 'outline',
+  size = 'md',
+  disabled = false,
+  className,
+}: SearchBarProps) => {
   return (
     <Input variant={variant} size={size} data-disabled={disabled}>
       <InputField
