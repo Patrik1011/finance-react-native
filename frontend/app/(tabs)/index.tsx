@@ -1,20 +1,49 @@
-import { Text, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SearchBar } from '@/components/ui/SearchBar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonText } from '@/components/ui/button';
 
-import {createCategory} from '@/services/categoryService';
+import { Category, createCategory, deleteCategory, getCategories } from '@/services/categoryService';
 
 export default function HomeScreen() {
   const [search, setSearch] = useState('');
+  const [categories, setCategories] = useState<Category[]>();
 
   const handleCreateCategory = async () => {
     try {
       await createCategory({ message: search });
+      setSearch('');
+      await handleGetCategories();
     } catch (error) {
       console.error('Error creating category', error);
     }
   }
+
+  const handleGetCategories = async () => {
+    try {
+      const categories = await getCategories();
+      console.log('categories', categories);
+      setCategories(categories);
+    } catch (error) {
+      console.error('Error getting categories', error);
+    }
+  }
+
+  const handleDeleteCategory = async (id: number) => {
+    try {
+      console.log('deleting category', id);
+      await deleteCategory(id);
+      setTimeout(async () => {
+        await handleGetCategories();
+      }, 1000);
+    } catch (error) {
+      console.error('Error deleting category', error);
+    }
+  }
+
+  useEffect(() => {
+    handleGetCategories();
+  }, []);
 
   return (
     <View className='px-6 mt-20'>
@@ -36,6 +65,21 @@ export default function HomeScreen() {
           </Button>
         </View>
       </View>
+
+      <FlatList
+        data={categories}
+        className='mt-6'
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View className='mt-2 py-2 px-4 bg-gray-200 rounded-lg flex-row justify-between items-center'>
+            <Text className='text-gray-800'>{item.message}</Text>
+            <TouchableOpacity onPress={async() => await handleDeleteCategory(item.id ?? 0)}>
+              <Text className='text-white bg-red-500 border border-red-500 p-2 rounded-lg'>Delete</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+
     </View>
   );
 }

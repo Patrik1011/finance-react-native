@@ -1,6 +1,7 @@
 import {fetchClient} from '@/services/fetchClient';
 
 export interface Category {
+  id?: number;
   message?: string;
 }
 
@@ -16,7 +17,5 @@ export async function createCategory(category: Category): Promise<Category> {
 }
 
 export async function deleteCategory(id: number): Promise<void> {
-  return fetchClient<void>(`/category/${id}`, {
-    method: 'DELETE',
-  });
+  await fetchClient(`/category/${id}`, { method: 'DELETE' });
 }
