@@ -6,7 +6,7 @@ export class CategoryEntity {
   id: number;
 
   @Column()
-  message?: string;
+  name?: string;
 }
 
 export default CategoryEntity;

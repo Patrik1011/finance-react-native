@@ -2,7 +2,7 @@ import { fetchClient } from '@/services/fetchClient';
 
 export interface Category {
   id?: number;
-  message?: string;
+  name?: string;
 }
 
 export async function getCategories(): Promise<Category[]> {

@@ -19,10 +19,10 @@ export default function HomeScreen() {
   const handleCreateOrUpdateCategory = async () => {
     try {
       if (editingCategory) {
-        await updateCategory(editingCategory.id!, { message: search });
+        await updateCategory(editingCategory.id!, { name: search });
         setEditingCategory(null);
       } else {
-        await createCategory({ message: search });
+        await createCategory({ name: search });
       }
       setSearch('');
       await handleGetCategories();
@@ -55,7 +55,7 @@ export default function HomeScreen() {
 
   const handleEditCategory = (category: Category) => {
     setEditingCategory(category);
-    setSearch(category.message ?? '');
+    setSearch(category.name ?? '');
   };
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function HomeScreen() {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View className="mt-2 py-2 px-4 bg-gray-200 rounded-lg flex-row justify-between items-center">
-            <Text className="text-gray-800">{item.message}</Text>
+            <Text className="text-gray-800">{item.name}</Text>
             <View className="flex-row gap-x-2">
               <TouchableOpacity onPress={() => handleEditCategory(item)}>
                 <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
