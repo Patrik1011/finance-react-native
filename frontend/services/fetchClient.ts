@@ -6,7 +6,7 @@ const BASE_URL = 'http://localhost:3000';
 
 export async function fetchClient<T = unknown>(
   endpoint: string,
-  { body, headers, ...customConfig }: FetchClientOptions = {}
+  { body, headers, ...customConfig }: FetchClientOptions = {},
 ): Promise<T> {
   const config: RequestInit = {
     ...customConfig,
@@ -29,13 +29,12 @@ export async function fetchClient<T = unknown>(
       if (errorData.message) {
         errorMsg = errorData.message;
       }
-    } catch {
-    }
+    } catch {}
     throw new Error(errorMsg);
   }
 
   if (response.status === 204) {
-    return {   } as T;
+    return {} as T;
   }
 
   return (await response.json()) as T;

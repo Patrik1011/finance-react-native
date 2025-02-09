@@ -1,4 +1,4 @@
-import {fetchClient} from '@/services/fetchClient';
+import { fetchClient } from '@/services/fetchClient';
 
 export interface Category {
   id?: number;
@@ -20,7 +20,10 @@ export async function deleteCategory(id: number): Promise<void> {
   await fetchClient(`/category/${id}`, { method: 'DELETE' });
 }
 
-export async function updateCategory(id: number, category: Category): Promise<Category> {
+export async function updateCategory(
+  id: number,
+  category: Category,
+): Promise<Category> {
   return fetchClient<Category>(`/category/${id}`, {
     method: 'PUT',
     body: category,
