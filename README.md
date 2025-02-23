@@ -5,10 +5,13 @@ This monorepo includes:
 - **frontend**: [React Native](https://reactnative.dev/) (TypeScript) application
 
 To run the project, you need to have the following tools installed:
+Run pnpm install in the root directory
+```bash
+pnpm install
+```
 ## Backend
 run the following command in the backend directory
 ```bash
-pnpm install
 pnpm run start:dev
 ```
 and install docker and docker-compose then run the following command in the backend directory
@@ -18,7 +21,6 @@ docker-compose up
 ## Frontend
 run the following command in the frontend directory
 ```bash
-pnpm install
 expo start
 ```
 
@@ -33,4 +35,5 @@ expo start
 <div style="display: flex; gap: 10px;">
   <img src="frontend/assets/images/app.png" alt="app.png" width="300"/>
   <img src="frontend/assets/images/app1.png" alt="app1.png" width="300"/>
+  <img src="frontend/assets/images/app2.png" alt="app2.png" width="300"/>
 </div>
