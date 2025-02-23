@@ -35,5 +35,5 @@ expo start
 <div style="display: flex; gap: 10px;">
   <img src="frontend/assets/images/app.png" alt="app.png" width="300"/>
   <img src="frontend/assets/images/app1.png" alt="app1.png" width="300"/>
-  <img src="frontend/assets/images/app2.png" alt="app1.png" width="300"/>
+  <img src="frontend/assets/images/app2.png" alt="app2.png" width="300"/>
 </div>
