@@ -30,7 +30,7 @@ expo start
 
 ## Categories
 <div style="display: flex; gap: 10px;">
-  <img src="frontend/assets/images/app.png" alt="app.png" width="150"/>
-  <img src="frontend/assets/images/app1.png" alt="app1.png" width="150"/>
-  <img src="frontend/assets/images/app2.png" alt="app2.png" width="150"/>
+  <img src="frontend/assets/images/app-landing.png" alt="landing" width="200"/>
+  <img src="frontend/assets/images/app-list.png" alt="list" width="200"/>
+  <img src="frontend/assets/images/app-add.png" alt="add" width="200"/>
 </div>
