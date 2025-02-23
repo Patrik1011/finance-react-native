@@ -25,15 +25,12 @@ expo start
 ```
 
 - **backend**: [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-
-
-
 - **frontend**: [Expo CLI](https://docs.expo.dev/workflow/expo-cli/)
 
 
 ## Categories
 <div style="display: flex; gap: 10px;">
-  <img src="frontend/assets/images/app.png" alt="app.png" width="300"/>
-  <img src="frontend/assets/images/app1.png" alt="app1.png" width="300"/>
-  <img src="frontend/assets/images/app2.png" alt="app2.png" width="300"/>
+  <img src="frontend/assets/images/app.png" alt="app.png" width="150"/>
+  <img src="frontend/assets/images/app1.png" alt="app1.png" width="150"/>
+  <img src="frontend/assets/images/app2.png" alt="app2.png" width="150"/>
 </div>
