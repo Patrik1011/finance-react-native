@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbService } from './db/db.service';
-import { CategoryModule } from './modules/category/category.module';
-import CategoryEntity from './entity/category.entity';
+import { CategoryModule } from './modules/category/categories.module';
+import { Category } from './modules/category/entity/category.entity';
+import { Entry } from './modules/entries/entity/entry.entity';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import CategoryEntity from './entity/category.entity';
       useClass: DbService,
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([CategoryEntity]),
+    TypeOrmModule.forFeature([Category]),
+    TypeOrmModule.forFeature([Entry]),
     CategoryModule,
   ],
   controllers: [AppController],
