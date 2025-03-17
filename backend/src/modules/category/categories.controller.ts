@@ -10,20 +10,22 @@ import {
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { Category } from './entity/category.entity';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
-@Controller('category')
+@Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
   @HttpCode(201)
-  async create(@Body() categoryDto: Category): Promise<Category> {
+  async create(@Body() categoryDto: CreateCategoryDto): Promise<Category> {
     return await this.categoriesService.create(categoryDto);
   }
 
   @Get()
   @HttpCode(200)
   async findAll(): Promise<Category[]> {
+    console.log('categories');
     return await this.categoriesService.findAll();
   }
 
@@ -31,7 +33,7 @@ export class CategoriesController {
   @HttpCode(200)
   async update(
     @Param('id') id: number,
-    @Body() updateCategoryDto: Category,
+    @Body() updateCategoryDto: Partial<CreateCategoryDto>,
   ): Promise<Category> {
     return await this.categoriesService.update(id, updateCategoryDto);
   }
