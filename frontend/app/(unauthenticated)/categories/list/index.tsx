@@ -73,7 +73,7 @@ export default function ListScreen() {
         data={categories}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View className="mt-2 py-2 px-4 bg-gray-200 rounded-lg flex-row justify-between items-center">
+          <View style={{ backgroundColor: item.color }} className={`mt-2 py-2 px-4 rounded-lg flex-row justify-between items-center`}>
             <Text className="text-gray-800">{item.title}</Text>
             <Text className="text-gray-800">{item.description}</Text>
             <View className="flex-row gap-x-2">
