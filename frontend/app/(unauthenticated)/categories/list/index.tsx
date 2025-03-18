@@ -28,7 +28,7 @@ export default function ListScreen() {
   const handleGetCategories = useCallback(async () => {
     try {
       const categories = await getCategories();
-      console.log('categories re-rendering', categories);
+      console.log('categories', categories);
       setCategories(categories);
     } catch (error) {
       console.error('Error getting categories', error);
@@ -37,7 +37,6 @@ export default function ListScreen() {
 
   const handleDeleteCategory = async (id: number) => {
     try {
-      console.log('deleting category', id);
       await deleteCategory(id);
       setTimeout(async () => {
         await handleGetCategories();
@@ -75,7 +74,8 @@ export default function ListScreen() {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View className="mt-2 py-2 px-4 bg-gray-200 rounded-lg flex-row justify-between items-center">
-            <Text className="text-gray-800">{item.name}</Text>
+            <Text className="text-gray-800">{item.title}</Text>
+            <Text className="text-gray-800">{item.description}</Text>
             <View className="flex-row gap-x-2">
               <TouchableOpacity onPress={() => handleEditCategory(item)}>
                 <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
