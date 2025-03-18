@@ -1,22 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DbService } from './db/db.service';
-import { CategoryModule } from './modules/category/category.module';
-import CategoryEntity from './entity/category.entity';
+import { CategoriesModule } from './modules/category/categories.module';
+import { EntriesModule } from './modules/entries/entries.module';
+import { dbConfig } from '../db.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass: DbService,
-      inject: [ConfigService],
-    }),
-    TypeOrmModule.forFeature([CategoryEntity]),
-    CategoryModule,
+    TypeOrmModule.forRoot(dbConfig),
+    CategoriesModule,
+    EntriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
