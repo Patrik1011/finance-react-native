@@ -65,11 +65,14 @@ export default function EntryListScreen() {
     try {
       if (categoryId) {
         const categoryEntries = await getEntriesByCategory(categoryId);
-        const entriesWithCategory = categoryEntries.entries.map(entry => ({
+        const entriesWithCategory = categoryEntries.entries.map((entry) => ({
           ...entry,
           category: categoryEntries.category,
         }));
-        setCategoryEntries({ ...categoryEntries, entries: entriesWithCategory });
+        setCategoryEntries({
+          ...categoryEntries,
+          entries: entriesWithCategory,
+        });
       } else {
         await handleGetEntries();
       }
@@ -152,11 +155,15 @@ export default function EntryListScreen() {
       </View>
 
       <FlatList
-        data={formData.categoryId && categoryEntries ? categoryEntries.entries : entries}
+        data={
+          formData.categoryId && categoryEntries
+            ? categoryEntries.entries
+            : entries
+        }
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderEntry}
       />
-      
+
       <CategoryPickerModal
         visible={modalVisible}
         categories={categories || []}

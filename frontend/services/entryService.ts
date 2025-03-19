@@ -43,6 +43,8 @@ export async function updateEntry(id: number, category: Entry): Promise<Entry> {
 export async function getEntriesByCategory(
   categoryId: number,
 ): Promise<CategoryEntries> {
-  const entries = await fetchClient<CategoryEntries>(`/entries/category/${categoryId}`);
+  const entries = await fetchClient<CategoryEntries>(
+    `/entries/category/${categoryId}`,
+  );
   return entries;
 }

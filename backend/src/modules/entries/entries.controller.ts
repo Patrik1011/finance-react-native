@@ -34,7 +34,7 @@ export class EntriesController {
   @HttpCode(200)
   async getEntriesByCategory(
     @Param('categoryId') id: number,
-  ): Promise<{ category: Category, entries: Entry[] }> {
+  ): Promise<{ category: Category; entries: Entry[] }> {
     return await this.entriesService.getEntriesByCategory(id);
   }
 

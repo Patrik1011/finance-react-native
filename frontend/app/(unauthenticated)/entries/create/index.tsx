@@ -1,9 +1,6 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { SearchBar } from '@/components/ui/SearchBar';
-import {
-  Category,
-  getCategories,
-} from '@/services/categoryService';
+import { Category, getCategories } from '@/services/categoryService';
 import { createEntry, Entry, updateEntry } from '@/services/entryService';
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -123,7 +120,7 @@ export default function EntryCreateScreen() {
       <CategoryPickerModal
         visible={modalVisible}
         categories={categories || []}
-        placeholder='Select a category'
+        placeholder="Select a category"
         selectedCategoryId={formData.categoryId}
         onSelectCategory={(categoryId) =>
           setFormData({ ...formData, categoryId })
