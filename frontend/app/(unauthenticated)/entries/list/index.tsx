@@ -11,7 +11,7 @@ import {
   getEntriesByCategory,
 } from '@/services/entryService';
 import { Category, getCategories } from '@/services/categoryService';
-import { Picker } from '@react-native-picker/picker';
+import CategoryPickerModal from '@/components/ui/category-picker';
 
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
@@ -23,7 +23,7 @@ export default function EntryListScreen() {
   const navigation = useNavigation<ListScreenNavigationProp>();
 
   const handleEditEntry = (entry: Entries) => {
-    navigation.navigate('UpdateEntry', { entry });
+    navigation.navigate('CreateEntry', { entry });
   };
 
   const handleCreateEntry = () => {
@@ -77,6 +77,13 @@ export default function EntryListScreen() {
       handleGetEntries();
       handleGetCategories();
     }, [handleGetEntries]),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      handleGetEntriesByCategory(formData.categoryId);
+    }
+    , [formData.categoryId]),
   );
 
   return (
@@ -141,42 +148,16 @@ export default function EntryListScreen() {
           </View>
         )}
       />
-
-      <Modal
+      
+      <CategoryPickerModal
         visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View className="flex-1 justify-center items-center bg-transparent bg-opacity-50">
-          <View className="w-4/5 bg-white rounded-lg p-5">
-            <Text className="text-lg mb-2">Select a category</Text>
-            <Picker
-              selectedValue={formData.categoryId?.toString() || ''}
-              onValueChange={(value: string) => {
-                const categoryId = value ? Number(value) : undefined;
-                setFormData({ ...formData, categoryId });
-                handleGetEntriesByCategory(categoryId);
-              }}
-            >
-              <Picker.Item label="All" value="" />
-              {categories.map((category) => (
-                <Picker.Item
-                  key={category.id}
-                  label={category.title!}
-                  value={category.id!.toString()}
-                />
-              ))}
-            </Picker>
-            <Button
-              className="mt-4 bg-blue-300 rounded-xl"
-              onPress={() => setModalVisible(false)}
-            >
-              <ButtonText className="font-medium text-sm">Done</ButtonText>
-            </Button>
-          </View>
-        </View>
-      </Modal>
+        categories={categories || []}
+        selectedCategoryId={formData.categoryId}
+        onSelectCategory={(categoryId) =>
+          setFormData({ ...formData, categoryId })
+        }
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 }
