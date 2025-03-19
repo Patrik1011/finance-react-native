@@ -5,14 +5,14 @@ import {
   getCategories,
   updateCategory,
 } from '@/services/categoryService';
-import { createEntry, Entry } from '@/services/entryService';
+import { createEntry, Entries } from '@/services/entryService';
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-type AddCategoryScreenRouteProp = RouteProp<RootStackParamList, 'CreateEntry'>;
+type UpdateCategoryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
 
 interface formData {
   title?: string;
@@ -23,12 +23,12 @@ interface formData {
 export default function EntryCreateScreen() {
   const [formData, setFormData] = useState<formData>({});
   const [categories, setCategories] = useState<Category[] | null>(null);
-  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
+  const [editingEntry, setEditingEntry] = useState<Entries | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
-  const route = useRoute<AddCategoryScreenRouteProp>();
-
+  const route = useRoute<UpdateCategoryScreenRouteProp>();
+  
   const fetchCategories = async () => {
     try {
       const categories = await getCategories();
@@ -56,8 +56,19 @@ export default function EntryCreateScreen() {
 
   useEffect(() => {
     if (route.params?.entry) {
+      console.log('route.params.entry', route.params.entry);
       setEditingEntry(route.params.entry);
-      setFormData(route.params.entry);
+
+
+      const formData = {
+        title: route.params.entry.title,
+        amount: route.params.entry.amount,
+        categoryId: route.params.entry.category?.id,
+      };
+
+      console.log('formData', formData);
+
+      setFormData(formData);
     }
   }, [route.params]);
 

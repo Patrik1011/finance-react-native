@@ -8,8 +8,12 @@ export interface Entry {
   categoryId?: number;
 }
 
-export async function getEntries(): Promise<Entry[]> {
-  const entries = await fetchClient<Entry[]>('/entries');
+export interface Entries extends Entry {
+  category?: Category;
+}
+
+export async function getEntries(): Promise<Entries[]> {
+  const entries = await fetchClient<Entries[]>('/entries');
   return entries;
 }
 
