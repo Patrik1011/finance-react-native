@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 
-function LandingScreen() {
+function EntryListScreen() {
   return (
     <View className="flex-1 items-center justify-center">
       <Text className="text-4xl">Welcome to Finance App</Text>
@@ -8,4 +8,4 @@ function LandingScreen() {
   );
 }
 
-export default LandingScreen;
+export default EntryListScreen;
