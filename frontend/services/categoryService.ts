@@ -8,7 +8,6 @@ export interface Category {
 }
 
 export async function getCategories(): Promise<Category[]> {
-
   const categories = await fetchClient<Category[]>('/categories');
   return categories;
 }

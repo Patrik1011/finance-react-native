@@ -63,8 +63,6 @@ describe('EntriesController (e2e)', () => {
   });
 
   it('/entries/:id (DELETE)', () => {
-    return request(app.getHttpServer())
-      .delete('/entries/2')
-      .expect(204);
+    return request(app.getHttpServer()).delete('/entries/2').expect(204);
   });
 });

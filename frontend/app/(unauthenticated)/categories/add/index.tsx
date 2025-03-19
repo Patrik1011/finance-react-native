@@ -51,7 +51,6 @@ export default function AddCategoryScreen() {
       setFormData({ title: '', description: '', color: '' });
 
       navigation.goBack();
-
     } catch (error) {
       console.error('Error creating/updating category', error);
     }
@@ -72,19 +71,27 @@ export default function AddCategoryScreen() {
           />
         </View>
         <View className="w-full">
-        <SearchBar
+          <SearchBar
             className="flex-1 placeholder:bg-gray-200 rounded-lg"
             value={formData.description || ''}
             placeholder="description"
-            onChange={(value) => setFormData({ ...formData, description: value })}
+            onChange={(value) =>
+              setFormData({ ...formData, description: value })
+            }
           />
-          </View>
         </View>
-        <View className="mt-2 w-1/3">
+      </View>
+      <View className="mt-2 w-1/3">
         <Button onPress={() => setIsColorPickerVisible(true)}>
-          <Text className="text-blue-500 border border-blue-500 p-2 rounded-lg">Pick a color</Text>
+          <Text className="text-blue-500 border border-blue-500 p-2 rounded-lg">
+            Pick a color
+          </Text>
         </Button>
-        <Modal visible={isColorPickerVisible} transparent={true} animationType="slide">
+        <Modal
+          visible={isColorPickerVisible}
+          transparent={true}
+          animationType="slide"
+        >
           <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
             <View className="bg-white p-4 rounded-lg">
               <ColorPicker
@@ -101,16 +108,16 @@ export default function AddCategoryScreen() {
           </View>
         </Modal>
       </View>
-        <View className="mt-2">
-          <Button
-            className="p-3 bg-blue-300 rounded-xl"
-            onPress={handleCreateOrUpdateCategory}
-          >
-            <ButtonText className="font-medium text-sm">
-              {editingCategory ? 'edit' : 'add'}
-            </ButtonText>
-          </Button>
-        </View>
+      <View className="mt-2">
+        <Button
+          className="p-3 bg-blue-300 rounded-xl"
+          onPress={handleCreateOrUpdateCategory}
+        >
+          <ButtonText className="font-medium text-sm">
+            {editingCategory ? 'edit' : 'add'}
+          </ButtonText>
+        </Button>
       </View>
+    </View>
   );
 }

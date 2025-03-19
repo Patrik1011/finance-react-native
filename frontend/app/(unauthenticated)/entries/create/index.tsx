@@ -9,4 +9,3 @@ function EntryCreateScreen() {
 }
 
 export default EntryCreateScreen;
-

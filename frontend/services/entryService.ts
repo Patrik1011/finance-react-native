@@ -24,17 +24,16 @@ export async function deleteEntry(id: number): Promise<void> {
   await fetchClient(`/entries/${id}`, { method: 'DELETE' });
 }
 
-export async function updateEntry(
-  id: number,
-  category: Entry,
-): Promise<Entry> {
+export async function updateEntry(id: number, category: Entry): Promise<Entry> {
   return fetchClient<Entry>(`/entries/${id}`, {
     method: 'PUT',
     body: category,
   });
 }
 
-export async function getEntriesByCategory(categoryId: number): Promise<Entry[]> {
+export async function getEntriesByCategory(
+  categoryId: number,
+): Promise<Entry[]> {
   const entries = await fetchClient<Entry[]>(`/entries/category/${categoryId}`);
   return entries;
 }
