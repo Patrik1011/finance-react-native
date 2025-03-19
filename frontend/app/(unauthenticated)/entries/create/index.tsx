@@ -12,7 +12,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-type UpdateCategoryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
+type UpdateCategoryScreenRouteProp = RouteProp<
+  RootStackParamList,
+  'UpdateEntry'
+>;
 
 interface formData {
   title?: string;
@@ -28,7 +31,7 @@ export default function EntryCreateScreen() {
 
   const navigation = useNavigation();
   const route = useRoute<UpdateCategoryScreenRouteProp>();
-  
+
   const fetchCategories = async () => {
     try {
       const categories = await getCategories();
@@ -58,7 +61,6 @@ export default function EntryCreateScreen() {
     if (route.params?.entry) {
       console.log('route.params.entry', route.params.entry);
       setEditingEntry(route.params.entry);
-
 
       const formData = {
         title: route.params.entry.title,
@@ -107,7 +109,8 @@ export default function EntryCreateScreen() {
           >
             <Text>
               {formData.categoryId
-                ? categories?.find((cat) => cat.id === formData.categoryId)?.title
+                ? categories?.find((cat) => cat.id === formData.categoryId)
+                    ?.title
                 : 'Select a category'}
             </Text>
           </TouchableOpacity>

@@ -4,7 +4,12 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/utils/types/navigation';
-import { deleteEntry, Entries, getEntries, getEntriesByCategory } from '@/services/entryService';
+import {
+  deleteEntry,
+  Entries,
+  getEntries,
+  getEntriesByCategory,
+} from '@/services/entryService';
 import { Category, getCategories } from '@/services/categoryService';
 import { Picker } from '@react-native-picker/picker';
 
@@ -71,7 +76,7 @@ export default function EntryListScreen() {
     useCallback(() => {
       handleGetEntries();
       handleGetCategories();
-    }, [handleGetEntries])
+    }, [handleGetEntries]),
   );
 
   return (
@@ -85,9 +90,7 @@ export default function EntryListScreen() {
           className="px-3 my-2 bg-blue-300 rounded-xl"
           onPress={handleCreateEntry}
         >
-          <ButtonText className="font-medium text-sm">
-            + Add Entry
-          </ButtonText>
+          <ButtonText className="font-medium text-sm">+ Add Entry</ButtonText>
         </Button>
       </View>
 
@@ -139,40 +142,41 @@ export default function EntryListScreen() {
         )}
       />
 
-        <Modal
-                visible={modalVisible}
-                transparent={true}
-                animationType="slide"
-                onRequestClose={() => setModalVisible(false)}
-              ><View className="flex-1 justify-center items-center bg-transparent bg-opacity-50">
-              <View className="w-4/5 bg-white rounded-lg p-5">
-                <Text className="text-lg mb-2">Select a category</Text>
-                <Picker
-                  selectedValue={formData.categoryId?.toString() || ''}
-                  onValueChange={(value: string) => {
-                    const categoryId = value ? Number(value) : undefined;
-                    setFormData({ ...formData, categoryId });
-                    handleGetEntriesByCategory(categoryId);
-                  }}
-                >
-                  <Picker.Item label="All" value="" />
-                  {categories.map((category) => (
-                    <Picker.Item
-                      key={category.id}
-                      label={category.title!}
-                      value={category.id!.toString()}
-                    />
-                  ))}
-                </Picker>
-                <Button
-                  className="mt-4 bg-blue-300 rounded-xl"
-                  onPress={() => setModalVisible(false)}
-                >
-                  <ButtonText className="font-medium text-sm">Done</ButtonText>
-                </Button>
-              </View>
-                </View>
-              </Modal>
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-transparent bg-opacity-50">
+          <View className="w-4/5 bg-white rounded-lg p-5">
+            <Text className="text-lg mb-2">Select a category</Text>
+            <Picker
+              selectedValue={formData.categoryId?.toString() || ''}
+              onValueChange={(value: string) => {
+                const categoryId = value ? Number(value) : undefined;
+                setFormData({ ...formData, categoryId });
+                handleGetEntriesByCategory(categoryId);
+              }}
+            >
+              <Picker.Item label="All" value="" />
+              {categories.map((category) => (
+                <Picker.Item
+                  key={category.id}
+                  label={category.title!}
+                  value={category.id!.toString()}
+                />
+              ))}
+            </Picker>
+            <Button
+              className="mt-4 bg-blue-300 rounded-xl"
+              onPress={() => setModalVisible(false)}
+            >
+              <ButtonText className="font-medium text-sm">Done</ButtonText>
+            </Button>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
