@@ -34,21 +34,23 @@ export class EntriesService {
     return await this.entryRepository.findOneBy({ id });
   }
 
-  async getEntriesByCategory(categoryId: number): Promise<Entry[]> {
+  async getEntriesByCategory(categoryId: number): Promise<{ category: Category, entries: Entry[] }> {
     const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
     });
-
-    console.log('category', category);
-
-    categoryId = category.id;
-
+  
     if (!category) {
       throw new Error('Category not found');
     }
-    return await this.entryRepository.find({
-      where: { category: { id: categoryId } },
+  
+    const entries = await this.entryRepository.find({
+      where: { category: { id: categoryId }},
     });
+  
+    return {
+      category: category,
+      entries,
+    };
   }
 
   async update(

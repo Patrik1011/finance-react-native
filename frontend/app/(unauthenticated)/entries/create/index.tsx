@@ -11,8 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import CategoryPickerModal from '@/components/ui/category-picker';
 
-type UpdateCategoryScreenRouteProp = RouteProp<
-  RootStackParamList, 'CreateEntry'>;
+type UpdateEntryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
 
 interface formData {
   title?: string;
@@ -27,7 +26,7 @@ export default function EntryCreateScreen() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
-  const route = useRoute<UpdateCategoryScreenRouteProp>();
+  const route = useRoute<UpdateEntryScreenRouteProp>();
 
   const fetchCategories = async () => {
     try {
@@ -55,15 +54,13 @@ export default function EntryCreateScreen() {
   };
 
   useEffect(() => {
-    if (route.params?.entry) {
-      setEditingEntry(route.params.entry);
-
-      console.log('route.params.entry', route.params.entry);
+    if (route.params?.updatedEntry) {
+      setEditingEntry(route.params.updatedEntry);
 
       const formData = {
-        title: route.params.entry.title,
-        amount: route.params.entry.amount,
-        categoryId: route.params.entry.category?.id,
+        title: route.params.updatedEntry.title,
+        amount: route.params.updatedEntry.amount,
+        categoryId: route.params.updatedEntry.category?.id,
       };
 
       setFormData(formData);
@@ -126,6 +123,7 @@ export default function EntryCreateScreen() {
       <CategoryPickerModal
         visible={modalVisible}
         categories={categories || []}
+        placeholder='Select a category'
         selectedCategoryId={formData.categoryId}
         onSelectCategory={(categoryId) =>
           setFormData({ ...formData, categoryId })

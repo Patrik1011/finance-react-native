@@ -12,6 +12,11 @@ export interface Entries extends Entry {
   category?: Category;
 }
 
+export interface CategoryEntries {
+  category: Category;
+  entries: Entries[];
+}
+
 export async function getEntries(): Promise<Entries[]> {
   const entries = await fetchClient<Entries[]>('/entries');
   return entries;
@@ -37,7 +42,7 @@ export async function updateEntry(id: number, category: Entry): Promise<Entry> {
 
 export async function getEntriesByCategory(
   categoryId: number,
-): Promise<Entry[]> {
-  const entries = await fetchClient<Entry[]>(`/entries/category/${categoryId}`);
+): Promise<CategoryEntries> {
+  const entries = await fetchClient<CategoryEntries>(`/entries/category/${categoryId}`);
   return entries;
 }

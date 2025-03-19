@@ -1,8 +1,9 @@
 import { Category } from '@/services/categoryService';
-import { Entries, Entry } from '@/services/entryService';
+import { Entries } from '@/services/entryService';
 
 export type RootStackParamList = {
   List: undefined;
   AddCategory: { category: Category } | undefined;
-  CreateEntry: { entry: Entries | Entry } | undefined;
+  CreateEntry: undefined;
+  UpdateEntry: { updatedEntry: Entries };
 };

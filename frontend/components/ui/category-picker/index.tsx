@@ -7,6 +7,7 @@ import { Category } from '@/services/categoryService';
 interface CategoryPickerModalProps {
   visible: boolean;
   categories: Category[];
+  placeholder?: string;
   selectedCategoryId?: number;
   onSelectCategory: (categoryId: number) => void;
   onClose: () => void;
@@ -15,6 +16,7 @@ interface CategoryPickerModalProps {
 const CategoryPickerModal: React.FC<CategoryPickerModalProps> = ({
   visible,
   categories,
+  placeholder,
   selectedCategoryId,
   onSelectCategory,
   onClose,
@@ -33,7 +35,7 @@ const CategoryPickerModal: React.FC<CategoryPickerModalProps> = ({
             selectedValue={selectedCategoryId?.toString() || ''}
             onValueChange={(value: string) => onSelectCategory(Number(value))}
           >
-            <Picker.Item label="Select a category" value="" enabled={false} />
+            <Picker.Item label={placeholder} value="" enabled={false} />
             {categories.map((category) => (
               <Picker.Item
                 key={category.id}

@@ -1,10 +1,11 @@
-import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { Button, ButtonText } from '@/components/ui/button';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/utils/types/navigation';
 import {
+  CategoryEntries,
   deleteEntry,
   Entries,
   getEntries,
@@ -16,14 +17,15 @@ import CategoryPickerModal from '@/components/ui/category-picker';
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
 export default function EntryListScreen() {
-  const [entries, setEntries] = useState<Entries[]>();
+  const [entries, setEntries] = useState<Entries[]>([]);
+  const [categoryEntries, setCategoryEntries] = useState<CategoryEntries>();
   const [formData, setFormData] = useState<{ categoryId?: number }>({});
   const [categories, setCategories] = useState<Category[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<ListScreenNavigationProp>();
 
-  const handleEditEntry = (entry: Entries) => {
-    navigation.navigate('CreateEntry', { entry });
+  const handleEditEntry = (updatedEntry: Entries) => {
+    navigation.navigate('UpdateEntry', { updatedEntry });
   };
 
   const handleCreateEntry = () => {
@@ -62,8 +64,12 @@ export default function EntryListScreen() {
   const handleGetEntriesByCategory = async (categoryId?: number) => {
     try {
       if (categoryId) {
-        const entries = await getEntriesByCategory(categoryId);
-        setEntries(entries);
+        const categoryEntries = await getEntriesByCategory(categoryId);
+        const entriesWithCategory = categoryEntries.entries.map(entry => ({
+          ...entry,
+          category: categoryEntries.category,
+        }));
+        setCategoryEntries({ ...categoryEntries, entries: entriesWithCategory });
       } else {
         await handleGetEntries();
       }
@@ -82,8 +88,39 @@ export default function EntryListScreen() {
   useFocusEffect(
     useCallback(() => {
       handleGetEntriesByCategory(formData.categoryId);
-    }
-    , [formData.categoryId]),
+    }, [formData.categoryId]),
+  );
+
+  const renderEntry = ({ item }: { item: Entries }) => (
+    <View
+      key={item.id}
+      style={{ backgroundColor: item.category?.color }}
+      className={`mt-2 py-2 px-4 rounded-lg flex-row justify-between items-center`}
+    >
+      <View>
+        <Text className="text-gray-800">{item.title}</Text>
+      </View>
+      <View>
+        <Text className="text-gray-800">{item.amount}</Text>
+      </View>
+      <View>
+        <Text className="text-gray-800">{item.category?.title}</Text>
+      </View>
+      <View className="flex-row gap-x-2">
+        <TouchableOpacity onPress={() => handleEditEntry(item)}>
+          <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
+            Edit
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => await handleDeleteEntry(item.id ?? 0)}
+        >
+          <Text className="text-white bg-red-500 border border-red-500 p-2 rounded-lg">
+            Delete
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 
   return (
@@ -115,43 +152,15 @@ export default function EntryListScreen() {
       </View>
 
       <FlatList
-        data={entries}
+        data={formData.categoryId && categoryEntries ? categoryEntries.entries : entries}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View
-            style={{ backgroundColor: item.category?.color }}
-            className={`mt-2 py-2 px-4 rounded-lg flex-row justify-between items-center`}
-          >
-            <View>
-              <Text className="text-gray-800">{item.title}</Text>
-            </View>
-            <View>
-              <Text className="text-gray-800">{item.amount}</Text>
-            </View>
-            <View>
-              <Text className="text-gray-800">{item.category?.title}</Text>
-            </View>
-            <View className="flex-row gap-x-2">
-              <TouchableOpacity onPress={() => handleEditEntry(item)}>
-                <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
-                  Edit
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={async () => await handleDeleteEntry(item.id ?? 0)}
-              >
-                <Text className="text-white bg-red-500 border border-red-500 p-2 rounded-lg">
-                  Delete
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+        renderItem={renderEntry}
       />
       
       <CategoryPickerModal
         visible={modalVisible}
         categories={categories || []}
+        placeholder="All"
         selectedCategoryId={formData.categoryId}
         onSelectCategory={(categoryId) =>
           setFormData({ ...formData, categoryId })

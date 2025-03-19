@@ -18,6 +18,11 @@ const ListStackConfig: StackConfig<keyof RootStackParamList>[] = [
     component: EntryCreateScreen,
     options: { title: 'Add New Entry' },
   },
+  {
+    name: 'UpdateEntry',
+    component: EntryCreateScreen,
+    options: { title: 'Edit Entry' },
+  }
 ];
 
 function EntryListStack() {
