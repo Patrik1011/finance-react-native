@@ -11,12 +11,12 @@ const ListStackConfig: StackConfig<keyof RootStackParamList>[] = [
   {
     name: 'List',
     component: EntryListScreen,
-    options: { title: 'Category List' },
+    options: { title: 'Entry List' },
   },
   {
-    name: 'AddCategory',
+    name: 'CreateEntry',
     component: EntryCreateScreen,
-    options: { title: 'Add New Category' },
+    options: { title: 'Add New Entry' },
   },
 ];
 

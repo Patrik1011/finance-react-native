@@ -36,7 +36,6 @@ export default function AddCategoryScreen() {
     if (route.params?.category) {
       setEditingCategory(route.params.category);
       setFormData(route.params.category);
-      console.log('form data', formData.description);
     }
   }, [route.params]);
 
