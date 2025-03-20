@@ -8,8 +8,8 @@ import {
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import { ColorPicker } from 'react-native-color-picker';
+import { View, Text, Modal, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 type AddCategoryScreenRouteProp = RouteProp<RootStackParamList, 'AddCategory'>;
 
@@ -19,12 +19,21 @@ interface formData {
   color?: string;
 }
 
+const predefinedColors = [
+  { label: 'Red', value: '#FF0000' },
+  { label: 'Green', value: '#00FF00' },
+  { label: 'Blue', value: '#0000FF' },
+  { label: 'Yellow', value: '#FFFF00' },
+  { label: 'Purple', value: '#800080' },
+];
+
+const getColorLabel = (colorValue: string) => {
+  const color = predefinedColors.find((c) => c.value === colorValue);
+  return color ? color.label : 'Select a color';
+};
+
 export default function AddCategoryScreen() {
-  const [formData, setFormData] = useState<formData>({
-    title: '',
-    description: '',
-    color: '',
-  });
+  const [formData, setFormData] = useState<formData>({});
 
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
@@ -47,7 +56,7 @@ export default function AddCategoryScreen() {
       } else {
         await createCategory(formData);
       }
-      setFormData({ title: '', description: '', color: '' });
+      setFormData({});
 
       navigation.goBack();
     } catch (error) {
@@ -80,33 +89,39 @@ export default function AddCategoryScreen() {
           />
         </View>
       </View>
-      <View className="mt-2 w-1/3">
-        <Button onPress={() => setIsColorPickerVisible(true)}>
-          <Text className="text-blue-500 border border-blue-500 p-2 rounded-lg">
-            Pick a color
-          </Text>
-        </Button>
-        <Modal
-          visible={isColorPickerVisible}
-          transparent={true}
-          animationType="slide"
+      <View className="mt-2 w-full">
+        <TouchableOpacity
+          onPress={() => setIsColorPickerVisible(true)}
+          className="p-2 bg-gray-200 rounded-lg"
         >
-          <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
-            <View className="bg-white p-4 rounded-lg">
-              <ColorPicker
-                onColorSelected={(color) => {
-                  setFormData({ ...formData, color: color });
-                  setIsColorPickerVisible(false);
-                }}
-                style={{ height: 200, width: 200 }}
-              />
-              <Button onPress={() => setIsColorPickerVisible(false)}>
-                <ButtonText>Close</ButtonText>
-              </Button>
-            </View>
-          </View>
-        </Modal>
+          <Text>{getColorLabel(formData.color || '')}</Text>
+        </TouchableOpacity>
       </View>
+      <Modal
+        visible={isColorPickerVisible}
+        transparent={true}
+        animationType="slide"
+      >
+        <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
+          <View className="bg-white p-4 rounded-lg w-3/4">
+            <Text className="text-gray-800 font-semibold">Choose a color</Text>
+            <Picker
+              selectedValue={formData.color}
+              onValueChange={(value) => setFormData({ ...formData, color: value })}
+            >
+              {predefinedColors.map((color) => (
+                <Picker.Item key={color.value} label={color.label} value={color.value} />
+              ))}
+            </Picker>
+            <Button
+              className="mt-4 p-2 bg-blue-300 rounded-lg"
+              onPress={() => setIsColorPickerVisible(false)}
+            >
+              <ButtonText className="font-medium text-sm">Done</ButtonText>
+            </Button>
+          </View>
+        </View>
+      </Modal>
       <View className="mt-2">
         <Button
           className="p-3 bg-blue-300 rounded-xl"
