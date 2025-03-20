@@ -11,6 +11,7 @@ import {
 import { EntriesService } from './entries.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { Entry } from './entity/entry.entity';
+import { Category } from '../category/entity/category.entity';
 
 @Controller('entries')
 export class EntriesController {
@@ -33,7 +34,7 @@ export class EntriesController {
   @HttpCode(200)
   async getEntriesByCategory(
     @Param('categoryId') id: number,
-  ): Promise<Entry[]> {
+  ): Promise<{ category: Category; entries: Entry[] }> {
     return await this.entriesService.getEntriesByCategory(id);
   }
 

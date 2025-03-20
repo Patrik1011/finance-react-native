@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import ListStack from './(unauthenticated)/categories/category-stack';
-import LandingScreen from './(unauthenticated)/landing';
+import EntryListStack from './(unauthenticated)/entries/entry-stack';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,9 +13,9 @@ type TabConfig = {
 
 const tabConfig: TabConfig[] = [
   {
-    name: 'Home',
-    icon: 'home',
-    component: LandingScreen,
+    name: 'Entries',
+    icon: 'menu',
+    component: EntryListStack,
   },
   {
     name: 'Category',
