@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getEntries, createEntry, deleteEntry, updateEntry, getEntriesByCategory } from '@/services/entryService';
+import {
+  getEntries,
+  createEntry,
+  deleteEntry,
+  updateEntry,
+  getEntriesByCategory,
+} from '@/services/entryService';
 import { Entries, Entry, CategoryEntries } from '@/services/entryService';
 
 interface EntryState {
@@ -19,25 +25,37 @@ export const fetchEntries = createAsyncThunk('entry/fetchEntries', async () => {
   return response;
 });
 
-export const addEntry = createAsyncThunk('entry/addEntry', async (entry: Entry) => {
-  const response = await createEntry(entry);
-  return response;
-});
+export const addEntry = createAsyncThunk(
+  'entry/addEntry',
+  async (entry: Entry) => {
+    const response = await createEntry(entry);
+    return response;
+  },
+);
 
-export const removeEntry = createAsyncThunk('entry/removeEntry', async (id: number) => {
-  await deleteEntry(id);
-  return id;
-});
+export const removeEntry = createAsyncThunk(
+  'entry/removeEntry',
+  async (id: number) => {
+    await deleteEntry(id);
+    return id;
+  },
+);
 
-export const modifyEntry = createAsyncThunk('entry/modifyEntry', async ({ id, entry }: { id: number, entry: Entry }) => {
-  const response = await updateEntry(id, entry);
-  return response;
-});
+export const modifyEntry = createAsyncThunk(
+  'entry/modifyEntry',
+  async ({ id, entry }: { id: number; entry: Entry }) => {
+    const response = await updateEntry(id, entry);
+    return response;
+  },
+);
 
-export const fetchEntriesByCategory = createAsyncThunk('entry/fetchEntriesByCategory', async (categoryId: number) => {
-  const response = await getEntriesByCategory(categoryId);
-  return response;
-});
+export const fetchEntriesByCategory = createAsyncThunk(
+  'entry/fetchEntriesByCategory',
+  async (categoryId: number) => {
+    const response = await getEntriesByCategory(categoryId);
+    return response;
+  },
+);
 
 const entrySlice = createSlice({
   name: 'entry',
@@ -60,10 +78,14 @@ const entrySlice = createSlice({
         state.entries.push(action.payload);
       })
       .addCase(removeEntry.fulfilled, (state, action) => {
-        state.entries = state.entries.filter(entry => entry.id !== action.payload);
+        state.entries = state.entries.filter(
+          (entry) => entry.id !== action.payload,
+        );
       })
       .addCase(modifyEntry.fulfilled, (state, action) => {
-        const index = state.entries.findIndex(entry => entry.id === action.payload.id);
+        const index = state.entries.findIndex(
+          (entry) => entry.id === action.payload.id,
+        );
         if (index !== -1) {
           state.entries[index] = action.payload;
         }

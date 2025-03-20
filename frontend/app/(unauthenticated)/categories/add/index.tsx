@@ -107,10 +107,16 @@ export default function AddCategoryScreen() {
             <Text className="text-gray-800 font-semibold">Choose a color</Text>
             <Picker
               selectedValue={formData.color}
-              onValueChange={(value) => setFormData({ ...formData, color: value })}
+              onValueChange={(value) =>
+                setFormData({ ...formData, color: value })
+              }
             >
               {predefinedColors.map((color) => (
-                <Picker.Item key={color.value} label={color.label} value={color.value} />
+                <Picker.Item
+                  key={color.value}
+                  label={color.label}
+                  value={color.value}
+                />
               ))}
             </Picker>
             <Button

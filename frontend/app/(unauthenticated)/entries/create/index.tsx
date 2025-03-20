@@ -41,7 +41,9 @@ export default function EntryCreateScreen() {
   const handleCreateOrUpdateCategory = async () => {
     try {
       if (editingEntry) {
-        await dispatch(modifyEntry({ id: editingEntry.id!, entry: formData })).unwrap();
+        await dispatch(
+          modifyEntry({ id: editingEntry.id!, entry: formData }),
+        ).unwrap();
         setEditingEntry(null);
       } else {
         await dispatch(addEntry(formData)).unwrap();
