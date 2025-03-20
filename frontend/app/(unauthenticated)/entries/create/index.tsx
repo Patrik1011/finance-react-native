@@ -1,12 +1,15 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { SearchBar } from '@/components/ui/SearchBar';
 import { Category, getCategories } from '@/services/categoryService';
-import { createEntry, Entry, updateEntry } from '@/services/entryService';
+import { Entry } from '@/services/entryService';
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import CategoryPickerModal from '@/components/ui/category-picker';
+import { AppDispatch } from '@/redux/store';
+import { useDispatch } from 'react-redux';
+import { addEntry, modifyEntry } from '@/redux/entrySlice';
 
 type UpdateEntryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
 
@@ -22,6 +25,7 @@ export default function EntryCreateScreen() {
   const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<UpdateEntryScreenRouteProp>();
 
@@ -37,10 +41,10 @@ export default function EntryCreateScreen() {
   const handleCreateOrUpdateCategory = async () => {
     try {
       if (editingEntry) {
-        await updateEntry(editingEntry.id!, formData);
+        await dispatch(modifyEntry({ id: editingEntry.id!, entry: formData })).unwrap();
         setEditingEntry(null);
       } else {
-        await createEntry(formData);
+        await dispatch(addEntry(formData)).unwrap();
       }
       setFormData({});
 

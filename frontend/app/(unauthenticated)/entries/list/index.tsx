@@ -6,27 +6,38 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/utils/types/navigation';
 import {
   CategoryEntries,
-  deleteEntry,
   Entries,
-  getEntries,
   getEntriesByCategory,
 } from '@/services/entryService';
 import { Category, getCategories } from '@/services/categoryService';
 import CategoryPickerModal from '@/components/ui/category-picker';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@/redux/store';
+import { fetchEntries, removeEntry } from '@/redux/entrySlice';
 
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
 export default function EntryListScreen() {
-  const [entries, setEntries] = useState<Entries[]>([]);
   const [categoryEntries, setCategoryEntries] = useState<CategoryEntries>();
   const [formData, setFormData] = useState<{ categoryId?: number }>({});
   const [categories, setCategories] = useState<Category[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<ListScreenNavigationProp>();
 
+  const dispatch: AppDispatch = useDispatch();
+  const entries = useSelector((state: RootState) => state.entry.entries);
+
   const handleEditEntry = (updatedEntry: Entries) => {
     navigation.navigate('UpdateEntry', { updatedEntry });
   };
+
+  const handleDeleteEntry = async (id: number) => {
+    dispatch(removeEntry(id));
+  };
+
+  const handleGetEntries = useCallback(() => {
+    dispatch(fetchEntries());
+  }, [dispatch]);
 
   const handleCreateEntry = () => {
     navigation.navigate('CreateEntry');
@@ -38,26 +49,6 @@ export default function EntryListScreen() {
       setCategories(categories);
     } catch (error) {
       console.error('Error getting categories', error);
-    }
-  };
-
-  const handleGetEntries = useCallback(async () => {
-    try {
-      const entries = await getEntries();
-      setEntries(entries);
-    } catch (error) {
-      console.error('Error getting entries', error);
-    }
-  }, []);
-
-  const handleDeleteEntry = async (id: number) => {
-    try {
-      await deleteEntry(id);
-      setTimeout(async () => {
-        await handleGetEntries();
-      }, 1000);
-    } catch (error) {
-      console.error('Error deleting entry', error);
     }
   };
 
