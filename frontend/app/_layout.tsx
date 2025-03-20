@@ -14,6 +14,9 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import NavigationTabs from './navigation-tabs';
 
+import { Provider } from 'react-redux';
+import store from '@/redux/store';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -33,11 +36,15 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <NavigationTabs />
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <Provider store={store}>
+      <GluestackUIProvider mode="light">
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <NavigationTabs />
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </Provider>
   );
 }
