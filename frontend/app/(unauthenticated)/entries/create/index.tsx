@@ -9,7 +9,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import CategoryPickerModal from '@/components/ui/category-picker';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
-import { addEntry, modifyEntry } from '@/redux/entrySlice';
+import { addEntry, modifyEntry, removeEntry } from '@/redux/entrySlice';
 
 type UpdateEntryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
 
@@ -56,6 +56,11 @@ export default function EntryCreateScreen() {
     }
   };
 
+  const handleDeleteEntry = async (id: number) => {
+    dispatch(removeEntry(id));
+    navigation.goBack();
+  };
+
   useEffect(() => {
     if (route.params?.updatedEntry) {
       setEditingEntry(route.params.updatedEntry);
@@ -77,7 +82,7 @@ export default function EntryCreateScreen() {
   return (
     <View className="px-4 mt-2">
       <Text className="text-gray-800 font-semibold text-xl">
-        Enter a new entry
+        {editingEntry ? 'Edit' : 'Create'} an entry
       </Text>
       <View className="flex gap-y-2">
         <View className="w-full">
@@ -133,6 +138,17 @@ export default function EntryCreateScreen() {
         }
         onClose={() => setModalVisible(false)}
       />
+
+      {editingEntry && (
+      <TouchableOpacity
+        className='mt-2 w-full'
+                onPress={async () => await handleDeleteEntry(editingEntry?.id ?? 0)}
+              >
+                <Text className="text-center text-white bg-red-500 border border-red-500 p-2 rounded-lg">
+                  Delete
+                </Text>
+              </TouchableOpacity>
+      )}
     </View>
   );
 }

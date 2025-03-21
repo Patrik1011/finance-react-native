@@ -13,7 +13,7 @@ import { Category, getCategories } from '@/services/categoryService';
 import CategoryPickerModal from '@/components/ui/category-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/redux/store';
-import { fetchEntries, removeEntry } from '@/redux/entrySlice';
+import { fetchEntries } from '@/redux/entrySlice';
 
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
@@ -29,10 +29,6 @@ export default function EntryListScreen() {
 
   const handleEditEntry = (updatedEntry: Entries) => {
     navigation.navigate('UpdateEntry', { updatedEntry });
-  };
-
-  const handleDeleteEntry = async (id: number) => {
-    dispatch(removeEntry(id));
   };
 
   const handleGetEntries = useCallback(() => {
@@ -100,17 +96,11 @@ export default function EntryListScreen() {
       <View>
         <Text className="text-gray-800">{item.category?.title}</Text>
       </View>
+
       <View className="flex-row gap-x-2">
         <TouchableOpacity onPress={() => handleEditEntry(item)}>
           <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
             Edit
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={async () => await handleDeleteEntry(item.id ?? 0)}
-        >
-          <Text className="text-white bg-red-500 border border-red-500 p-2 rounded-lg">
-            Delete
           </Text>
         </TouchableOpacity>
       </View>

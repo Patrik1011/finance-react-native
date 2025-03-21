@@ -28,7 +28,6 @@ export default function ListScreen() {
   const handleGetCategories = useCallback(async () => {
     try {
       const categories = await getCategories();
-      console.log('categories', categories);
       setCategories(categories);
     } catch (error) {
       console.error('Error getting categories', error);
