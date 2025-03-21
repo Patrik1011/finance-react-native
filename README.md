@@ -30,7 +30,23 @@ expo start
 
 ## Categories
 <div style="display: flex; gap: 10px;">
-  <img src="frontend/assets/images/app-landing.png" alt="landing" width="200"/>
-  <img src="frontend/assets/images/app-list.png" alt="list" width="200"/>
-  <img src="frontend/assets/images/app-add.png" alt="add" width="200"/>
+  <img src="frontend/assets/images/category-1.png" alt="landing" width="200"/>
+  <img src="frontend/assets/images/category-2.png" alt="list" width="200"/>
+  <img src="frontend/assets/images/category-3.png" alt="add" width="200"/>
+</div>
+
+## Entries
+<div style="display: flex; gap: 10px;">
+  <img src="frontend/assets/images/entry-1.png" alt="landing" width="200"/>
+  <img src="frontend/assets/images/entry-2.png" alt="list" width="200"/>
+  <img src="frontend/assets/images/entry-3.png" alt="add" width="200"/>
+</div>
+<div style="display: flex; gap: 10px; margin-top: 10px;">
+  <img src="frontend/assets/images/entry-4.png" alt="add" width="200"/>
+</div>
+
+
+## Tests
+<div style="display: flex; gap: 10px;">
+  <img src="frontend/assets/images/tests.png" alt="landing" width="200"/>
 </div>
