@@ -132,7 +132,13 @@ export default function EntryListScreen() {
         </Button>
       </View>
 
-      <View className="w-full mt-0">
+      <View>
+        <Text className="text-gray-800 font-semibold text-lg pb-2">
+          Keep track of your expenses and income.
+        </Text>
+      </View>
+
+      <View className="w-full pb-2">
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
           className="p-2 border border-gray-300 rounded bg-gray-100"

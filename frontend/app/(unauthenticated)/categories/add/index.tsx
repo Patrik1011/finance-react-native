@@ -20,11 +20,11 @@ interface formData {
 }
 
 const predefinedColors = [
-  { label: 'Red', value: '#FF0000' },
-  { label: 'Green', value: '#00FF00' },
-  { label: 'Blue', value: '#0000FF' },
-  { label: 'Yellow', value: '#FFFF00' },
-  { label: 'Purple', value: '#800080' },
+  { label: 'Brown', value: '#e7d8c9' },
+  { label: 'Green', value: '#cdeac0' },
+  { label: 'Blue', value: '#e2fdff' },
+  { label: 'Yellow', value: '#fcefb4' },
+  { label: 'Purple', value: '#e7c6ff' },
 ];
 
 const getColorLabel = (colorValue: string) => {
@@ -66,10 +66,11 @@ export default function AddCategoryScreen() {
 
   return (
     <View className="px-4 mt-2">
-      <Text className="text-gray-800 font-semibold text-xl">
+      <Text className="text-gray-800 font-semibold text-xl pb-4">
         Enter a new category
       </Text>
       <View className="flex gap-y-2">
+     
         <View className="w-full">
           <SearchBar
             className="flex-1 placeholder:bg-gray-200 rounded-lg"
@@ -102,7 +103,7 @@ export default function AddCategoryScreen() {
         transparent={true}
         animationType="slide"
       >
-        <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
+        <View className="flex-1 justify-center items-center bg-transparent">
           <View className="bg-white p-4 rounded-lg w-3/4">
             <Text className="text-gray-800 font-semibold">Choose a color</Text>
             <Picker
