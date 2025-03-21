@@ -28,7 +28,6 @@ export default function ListScreen() {
   const handleGetCategories = useCallback(async () => {
     try {
       const categories = await getCategories();
-      console.log('categories', categories);
       setCategories(categories);
     } catch (error) {
       console.error('Error getting categories', error);
@@ -67,6 +66,12 @@ export default function ListScreen() {
             + Add Category
           </ButtonText>
         </Button>
+      </View>
+
+      <View>
+        <Text className="text-gray-800 font-semibold text-lg">
+          Create categories so you can organize your entries better.
+        </Text>
       </View>
 
       <FlatList

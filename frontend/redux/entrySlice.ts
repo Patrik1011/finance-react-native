@@ -4,7 +4,6 @@ import {
   createEntry,
   deleteEntry,
   updateEntry,
-  getEntriesByCategory,
 } from '@/services/entryService';
 import { Entries, Entry, CategoryEntries } from '@/services/entryService';
 
@@ -49,14 +48,6 @@ export const modifyEntry = createAsyncThunk(
   },
 );
 
-export const fetchEntriesByCategory = createAsyncThunk(
-  'entry/fetchEntriesByCategory',
-  async (categoryId: number) => {
-    const response = await getEntriesByCategory(categoryId);
-    return response;
-  },
-);
-
 const entrySlice = createSlice({
   name: 'entry',
   initialState,
@@ -89,9 +80,6 @@ const entrySlice = createSlice({
         if (index !== -1) {
           state.entries[index] = action.payload;
         }
-      })
-      .addCase(fetchEntriesByCategory.fulfilled, (state, action) => {
-        state.categoryEntries = action.payload;
       });
   },
 });
