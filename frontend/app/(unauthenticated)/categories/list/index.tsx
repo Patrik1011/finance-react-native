@@ -68,11 +68,11 @@ export default function ListScreen() {
         </Button>
       </View>
 
-<View>
-       <Text className="text-gray-800 font-semibold text-lg">
-             Create categories so you can organize your entries better.
-            </Text>
-            </View>
+      <View>
+        <Text className="text-gray-800 font-semibold text-lg">
+          Create categories so you can organize your entries better.
+        </Text>
+      </View>
 
       <FlatList
         data={categories}

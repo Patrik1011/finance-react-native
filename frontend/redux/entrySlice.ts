@@ -80,7 +80,7 @@ const entrySlice = createSlice({
         if (index !== -1) {
           state.entries[index] = action.payload;
         }
-      })
+      });
   },
 });
 

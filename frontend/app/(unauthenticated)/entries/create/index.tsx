@@ -140,14 +140,14 @@ export default function EntryCreateScreen() {
       />
 
       {editingEntry && (
-      <TouchableOpacity
-        className='mt-2 w-full'
-                onPress={async () => await handleDeleteEntry(editingEntry?.id ?? 0)}
-              >
-                <Text className="text-center text-white bg-red-500 border border-red-500 p-2 rounded-lg">
-                  Delete
-                </Text>
-              </TouchableOpacity>
+        <TouchableOpacity
+          className="mt-2 w-full"
+          onPress={async () => await handleDeleteEntry(editingEntry?.id ?? 0)}
+        >
+          <Text className="text-center text-white bg-red-500 border border-red-500 p-2 rounded-lg">
+            Delete
+          </Text>
+        </TouchableOpacity>
       )}
     </View>
   );

@@ -70,7 +70,6 @@ export default function AddCategoryScreen() {
         Enter a new category
       </Text>
       <View className="flex gap-y-2">
-     
         <View className="w-full">
           <SearchBar
             className="flex-1 placeholder:bg-gray-200 rounded-lg"
