@@ -31,14 +31,14 @@ export class UsersService {
       where: { username: username },
     });
 
-    if (!user) throw new Error('User not found');
+    if (!user) return null;
 
     return user;
   }
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const { username, password } = createUserDto;
-    return this.userRepository.save({ username, password }); //TODO: hash password
+    const { username, password, role } = createUserDto;
+    return this.userRepository.save({ username, password, role }); //TODO: hash password
   }
 
   async findAll(): Promise<UserEntity[]> {
