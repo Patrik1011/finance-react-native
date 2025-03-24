@@ -1,4 +1,4 @@
-import { Role } from "src/utils/enums";
+import { Role } from 'src/utils/enums';
 
 export class UserSignupDto {
   username: string;

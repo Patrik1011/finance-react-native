@@ -9,10 +9,11 @@ import { resolve } from 'node:path';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: resolve(__dirname, "../.env"),
+      envFilePath: resolve(__dirname, '../.env'),
       isGlobal: true,
     }),
-    TypeOrmModule.forFeature([UserEntity])],
+    TypeOrmModule.forFeature([UserEntity]),
+  ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

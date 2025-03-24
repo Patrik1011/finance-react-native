@@ -1,7 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { isValidPassword, isValidUsername } from 'src/utils/credentials-validator';
+import {
+  isValidPassword,
+  isValidUsername,
+} from 'src/utils/credentials-validator';
 import * as bcrypt from 'bcrypt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserSignupDto } from './dto/user-signup.dto';
@@ -15,22 +18,21 @@ export class AuthService {
 
   async signup(signupDto: UserSignupDto) {
     try {
-
       if (!isValidUsername(signupDto.username)) {
-        throw new BadRequestException("Invalid email format");
+        throw new BadRequestException('Invalid email format');
       }
 
       if (!isValidPassword(signupDto.password)) {
         throw new BadRequestException(
-          "Password must contain at least 6 characters, including uppercase, lowercase, number",
+          'Password must contain at least 6 characters, including uppercase, lowercase, number',
         );
       }
 
-      const {username, password, role} = signupDto;
+      const { username, password, role } = signupDto;
 
       const userExists = await this.usersService.findOne(username);
       if (userExists) {
-        throw new BadRequestException("User already exists");
+        throw new BadRequestException('User already exists');
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,36 +43,34 @@ export class AuthService {
         role,
       });
       return user;
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
   }
 
   async login(loginDto: UserLoginDto) {
-
     const { username, password } = loginDto;
 
     const user = await this.usersService.findOne(username);
-    if(!user) {
-      throw new BadRequestException("User not found");
+    if (!user) {
+      throw new BadRequestException('User not found');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new BadRequestException("Invalid password");
+      throw new BadRequestException('Invalid password');
     }
 
     const payload = {
-        username: user.username,
-        id: user.id,
-      };
+      username: user.username,
+      id: user.id,
+    };
 
-      const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload);
 
-      return {
-        accessToken,
-      };
+    return {
+      accessToken,
+    };
   }
 
   async upgrade(userId: number) {
@@ -87,6 +87,4 @@ export class AuthService {
     }
     return null;
   }
-
-  
 }
