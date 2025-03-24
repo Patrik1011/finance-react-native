@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { EntriesService } from './entries.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
-import { Entry } from './entity/entry.entity';
-import { Category } from '../category/entity/category.entity';
+import { Entry } from 'src/entities/entry.entity';
+import { Category } from 'src/entities/category.entity';
 
 @Controller('entries')
 export class EntriesController {

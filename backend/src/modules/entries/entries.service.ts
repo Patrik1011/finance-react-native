@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Entry } from './entity/entry.entity';
 import { CreateEntryDto } from './dto/create-entry.dto';
-import { Category } from '../category/entity/category.entity';
+import { Entry } from 'src/entities/entry.entity';
+import { Category } from 'src/entities/category.entity';
 
 @Injectable()
 export class EntriesService {
@@ -22,7 +22,11 @@ export class EntriesService {
     if (!category) {
       throw new Error('Category not found');
     }
-    const entry = this.entryRepository.create({ title, amount, category });
+    const entry = this.entryRepository.create({
+      title,
+      amount,
+      categoryId: category.id,
+    });
     return await this.entryRepository.save(entry);
   }
 
