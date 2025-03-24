@@ -13,7 +13,6 @@ import { CreateEntryDto } from './dto/create-entry.dto';
 import { Entry } from 'src/entities/entry.entity';
 import { Category } from 'src/entities/category.entity';
 
-
 @Controller('entries')
 export class EntriesController {
   constructor(private readonly entriesService: EntriesService) {}

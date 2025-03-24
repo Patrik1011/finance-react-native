@@ -22,7 +22,11 @@ export class EntriesService {
     if (!category) {
       throw new Error('Category not found');
     }
-    const entry = this.entryRepository.create({ title, amount, categoryId: category.id });
+    const entry = this.entryRepository.create({
+      title,
+      amount,
+      categoryId: category.id,
+    });
     return await this.entryRepository.save(entry);
   }
 
