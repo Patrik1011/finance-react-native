@@ -7,6 +7,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { EntriesModule } from './modules/entries/entries.module';
 import { dbConfig } from '../db.service';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './modules/users/users.module';
     CategoriesModule,
     EntriesModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
