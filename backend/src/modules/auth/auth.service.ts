@@ -21,7 +21,7 @@ export class AuthService {
   ) {}
 
   async signup(signupDto: UserSignupDto) {
-    const {firstName, lastName, email, username, password, role } = signupDto;
+    const { firstName, lastName, email, username, password, role } = signupDto;
 
     try {
       if (!isValidUsername(signupDto.username)) {
@@ -85,6 +85,4 @@ export class AuthService {
       },
     };
   }
-
-  
 }

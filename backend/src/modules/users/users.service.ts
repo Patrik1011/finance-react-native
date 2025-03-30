@@ -27,14 +27,15 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<Partial<UserDto>> {
-    const { firstName, lastName, email, username, password, role } = createUserDto;
+    const { firstName, lastName, email, username, password, role } =
+      createUserDto;
     return this.userRepository.save({
-      first_name: firstName, 
-      last_name: lastName, 
-      email, 
-      username, 
-      password, 
-      role 
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      username,
+      password,
+      role,
     });
   }
 

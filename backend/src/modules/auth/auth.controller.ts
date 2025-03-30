@@ -24,5 +24,4 @@ export class AuthController {
     signUpDto.role = Role.ADMIN;
     return this.authService.signup(signUpDto);
   }
-
 }
