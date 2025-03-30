@@ -7,7 +7,7 @@ import {
 import { Role } from 'src/utils/enums';
 
 @Injectable()
-export class PremiumGuard implements CanActivate {
+export class PremiumUserGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
