@@ -16,7 +16,6 @@ export class PremiumUserGuard implements CanActivate {
       throw new ForbiddenException('User not authenticated');
     }
 
-    // Check if the user has the PREMIUM_USER role
     if (!user.roles.includes(Role.PREMIUM_USER)) {
       throw new ForbiddenException('Premium subscription required');
     }

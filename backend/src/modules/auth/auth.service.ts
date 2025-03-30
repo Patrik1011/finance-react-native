@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -74,17 +74,19 @@ export class AuthService {
   }
 
   async upgrade(userId: number) {
-    return this.usersService.upgrade(userId);
-  }
-
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-
-      return result;
+    const user = await this.usersService.findUserById(userId);
+    
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
-    return null;
+    
+    await this.usersService.upgradeToPremium(userId);
+    
+    const updatedUser = await this.usersService.findUserById(userId);
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      roles: updatedUser.role
+    };
   }
 }
