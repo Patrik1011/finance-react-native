@@ -25,7 +25,7 @@ import { PremiumUserGuard } from './guards/premium-user.guard';
     JwtAuthGuard,
     AdminGuard,
     PremiumUserGuard,
-    ],
+  ],
   exports: [AuthService, JwtAuthGuard, AdminGuard, PremiumUserGuard, JwtModule],
 })
 export class AuthModule {}
