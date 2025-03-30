@@ -5,10 +5,10 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
 } from 'typeorm';
-import { Category } from './category.entity';
+import { CategoryEntity } from './category.entity';
 
 @Entity()
-export class Entry {
+export class EntryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,9 +18,9 @@ export class Entry {
   @Column({ nullable: false })
   amount: number;
 
-  @ManyToOne(() => Category, (category) => category.entries)
+  @ManyToOne(() => CategoryEntity, (category) => category.entries)
   @JoinColumn({ name: 'categoryId' })
-  category: Category;
+  category: CategoryEntity;
 
   @Column({ nullable: false })
   categoryId: number;

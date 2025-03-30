@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { EntriesService } from './entries.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
-import { Entry } from 'src/entities/entry.entity';
-import { Category } from 'src/entities/category.entity';
+import { EntryEntity } from 'src/entities/entry.entity';
+import { CategoryEntity } from 'src/entities/category.entity';
 
 @Controller('entries')
 export class EntriesController {
@@ -19,13 +19,13 @@ export class EntriesController {
 
   @Post()
   @HttpCode(201)
-  async create(@Body() entryDto: CreateEntryDto): Promise<Entry> {
+  async create(@Body() entryDto: CreateEntryDto): Promise<EntryEntity> {
     return await this.entriesService.create(entryDto);
   }
 
   @Get()
   @HttpCode(200)
-  async findAll(): Promise<Entry[]> {
+  async findAll(): Promise<EntryEntity[]> {
     console.log('categories');
     return await this.entriesService.findAll();
   }
@@ -34,7 +34,7 @@ export class EntriesController {
   @HttpCode(200)
   async getEntriesByCategory(
     @Param('categoryId') id: number,
-  ): Promise<{ category: Category; entries: Entry[] }> {
+  ): Promise<{ category: CategoryEntity; entries: EntryEntity[] }> {
     return await this.entriesService.getEntriesByCategory(id);
   }
 
@@ -43,7 +43,7 @@ export class EntriesController {
   async update(
     @Param('id') id: number,
     @Body() updateEntryDto: Partial<CreateEntryDto>,
-  ): Promise<Entry> {
+  ): Promise<EntryEntity> {
     return await this.entriesService.update(id, updateEntryDto);
   }
 

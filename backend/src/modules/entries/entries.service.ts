@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEntryDto } from './dto/create-entry.dto';
-import { Entry } from 'src/entities/entry.entity';
-import { Category } from 'src/entities/category.entity';
+import { EntryEntity } from 'src/entities/entry.entity';
+import { CategoryEntity } from 'src/entities/category.entity';
 
 @Injectable()
 export class EntriesService {
   constructor(
-    @InjectRepository(Entry)
-    private readonly entryRepository: Repository<Entry>,
-    @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(EntryEntity)
+    private readonly entryRepository: Repository<EntryEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoryRepository: Repository<CategoryEntity>,
   ) {}
 
-  async create(createEntryDto: CreateEntryDto): Promise<Entry> {
+  async create(createEntryDto: CreateEntryDto): Promise<EntryEntity> {
     const { title, amount, categoryId } = createEntryDto;
     const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
@@ -30,17 +30,17 @@ export class EntriesService {
     return await this.entryRepository.save(entry);
   }
 
-  async findAll(): Promise<Entry[]> {
+  async findAll(): Promise<EntryEntity[]> {
     return await this.entryRepository.find({ relations: ['category'] });
   }
 
-  async findOne(id: number): Promise<Entry> {
+  async findOne(id: number): Promise<EntryEntity> {
     return await this.entryRepository.findOneBy({ id });
   }
 
   async getEntriesByCategory(
     categoryId: number,
-  ): Promise<{ category: Category; entries: Entry[] }> {
+  ): Promise<{ category: CategoryEntity; entries: EntryEntity[] }> {
     const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
     });
@@ -62,7 +62,7 @@ export class EntriesService {
   async update(
     id: number,
     updateEntryDto: Partial<CreateEntryDto>,
-  ): Promise<Entry> {
+  ): Promise<EntryEntity> {
     const { categoryId, ...updateData } = updateEntryDto;
 
     if (categoryId) {

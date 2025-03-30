@@ -1,12 +1,10 @@
 import {
   Controller,
   Post,
-  UseGuards,
   Request,
   Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserSignupDto } from './dto/user-signup.dto';
 import { Role } from 'src/utils/enums';
@@ -26,7 +24,12 @@ export class AuthController {
     return this.authService.signup(signUpDto);
   }
 
-   @UseGuards(JwtAuthGuard)
+  @Post('create-admin')
+  createAdmin(@Body() signUpDto: UserSignupDto) {
+    signUpDto.role = Role.ADMIN; 
+    return this.authService.signup(signUpDto);
+  }
+
    @Post('upgrade')
    upgrade(@Request() req) {
      return this.authService.upgrade(req.user.id);

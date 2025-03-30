@@ -12,16 +12,6 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async upgrade(userId: number) {
-    const user = await this.findUserById(userId);
-
-    if (!user) throw new Error('User not found');
-
-    user.role = Role.PREMIUM_USER;
-
-    return this.userRepository.save(user);
-  }
-
   async findUserById(id: number): Promise<UserEntity> {
     return this.userRepository.findOne({ where: { id: id } });
   }
