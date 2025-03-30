@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import { Role } from 'src/utils/enums';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -8,15 +8,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async findUserById(id: number): Promise<UserEntity> {
+  async findUserById(id: number): Promise<User> {
     return this.userRepository.findOne({ where: { id: id } });
   }
 
-  async findOne(username: string): Promise<UserEntity> {
+  async findOne(username: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { username: username },
     });
@@ -26,16 +26,16 @@ export class UsersService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const { username, password, role } = createUserDto;
     return this.userRepository.save({ username, password, role });
   }
 
-  async findAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  async upgradeToPremium(userId: number): Promise<UserEntity> {
+  async upgradeToPremium(userId: number): Promise<User> {
     const user = await this.findUserById(userId);
 
     if (!user) throw new Error('User not found');

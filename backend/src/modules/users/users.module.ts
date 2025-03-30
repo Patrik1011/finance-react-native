@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { ConfigModule } from '@nestjs/config';
@@ -12,7 +12,7 @@ import { resolve } from 'node:path';
       envFilePath: resolve(__dirname, '../.env'),
       isGlobal: true,
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [UsersController],
   providers: [UsersService],
