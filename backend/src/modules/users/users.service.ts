@@ -12,16 +12,6 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async upgrade(userId: number) {
-    const user = await this.findUserById(userId);
-
-    if (!user) throw new Error('User not found');
-
-    user.role = Role.PREMIUM_USER;
-
-    return this.userRepository.save(user);
-  }
-
   async findUserById(id: number): Promise<UserEntity> {
     return this.userRepository.findOne({ where: { id: id } });
   }
@@ -38,10 +28,24 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password, role } = createUserDto;
-    return this.userRepository.save({ username, password, role }); //TODO: hash password
+    return this.userRepository.save({ username, password, role });
   }
 
   async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
+  }
+
+  async upgradeToPremium(userId: number): Promise<UserEntity> {
+    const user = await this.findUserById(userId);
+
+    if (!user) throw new Error('User not found');
+
+    if (user.role === Role.PREMIUM_USER) {
+      throw new Error('User is already a premium user');
+    }
+
+    user.role = Role.PREMIUM_USER;
+
+    return this.userRepository.save(user);
   }
 }

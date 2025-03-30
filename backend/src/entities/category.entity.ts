@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Entry } from './entry.entity';
+import { EntryEntity } from './entry.entity';
 
 @Entity()
-export class Category {
+export class CategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -15,6 +15,6 @@ export class Category {
   @Column({ default: '' })
   color: string;
 
-  @OneToMany(() => Entry, (entry) => entry.category)
-  entries: Entry[];
+  @OneToMany(() => EntryEntity, (entry) => entry.category)
+  entries: EntryEntity[];
 }
