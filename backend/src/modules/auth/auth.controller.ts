@@ -1,4 +1,4 @@
-import { Controller, Post, Request, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserSignupDto } from './dto/user-signup.dto';
@@ -25,8 +25,4 @@ export class AuthController {
     return this.authService.signup(signUpDto);
   }
 
-  @Post('upgrade')
-  upgrade(@Request() req) {
-    return this.authService.upgrade(req.user.id);
-  }
 }

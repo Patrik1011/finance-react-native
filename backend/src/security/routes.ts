@@ -18,7 +18,7 @@ export const routeAccessMap: RouteAccess[] = [
   { pattern: '/auth/signup/', method: 'POST', access: AccessType.PUBLIC },
   { pattern: '/auth/create-admin/', method: 'POST', access: AccessType.PUBLIC },
 
-  { pattern: '/auth/upgrade/', method: 'POST', access: AccessType.USER },
+  { pattern: '/users/upgrade/', method: 'POST', access: AccessType.USER },
 
   // Default - require authentication
   { pattern: '/*', method: '*', access: AccessType.USER },

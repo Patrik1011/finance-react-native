@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
 import { Role } from 'src/utils/enums';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(UserDto)
+    private userRepository: Repository<UserDto>,
   ) {}
 
-  async findUserById(id: number): Promise<User> {
+  async findUserById(id: number): Promise<UserDto> {
     return this.userRepository.findOne({ where: { id: id } });
   }
 
-  async findOne(username: string): Promise<User> {
+  async findUserByEmail(email: string): Promise<UserDto> {
     const user = await this.userRepository.findOne({
-      where: { username: username },
+      where: { email: email },
     });
 
     if (!user) return null;
@@ -26,16 +26,23 @@ export class UsersService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const { username, password, role } = createUserDto;
-    return this.userRepository.save({ username, password, role });
+  async create(createUserDto: CreateUserDto): Promise<Partial<UserDto>> {
+    const { firstName, lastName, email, username, password, role } = createUserDto;
+    return this.userRepository.save({
+      first_name: firstName, 
+      last_name: lastName, 
+      email, 
+      username, 
+      password, 
+      role 
+    });
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserDto[]> {
     return this.userRepository.find();
   }
 
-  async upgradeToPremium(userId: number): Promise<User> {
+  async upgradeToPremium(userId: number): Promise<Partial<UserDto>> {
     const user = await this.findUserById(userId);
 
     if (!user) throw new Error('User not found');
@@ -46,6 +53,11 @@ export class UsersService {
 
     user.role = Role.PREMIUM_USER;
 
-    return this.userRepository.save(user);
+    const updatedUser = await this.userRepository.save(user);
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      role: updatedUser.role,
+    };
   }
 }

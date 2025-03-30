@@ -21,6 +21,8 @@ export class AuthService {
   ) {}
 
   async signup(signupDto: UserSignupDto) {
+    const {firstName, lastName, email, username, password, role } = signupDto;
+
     try {
       if (!isValidUsername(signupDto.username)) {
         throw new BadRequestException('Invalid email format');
@@ -32,9 +34,7 @@ export class AuthService {
         );
       }
 
-      const { username, password, role } = signupDto;
-
-      const userExists = await this.usersService.findOne(username);
+      const userExists = await this.usersService.findUserByEmail(email);
       if (userExists) {
         throw new BadRequestException('User already exists');
       }
@@ -42,6 +42,9 @@ export class AuthService {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const user = await this.usersService.create({
+        firstName,
+        lastName,
+        email,
         username,
         password: hashedPassword,
         role,
@@ -53,9 +56,9 @@ export class AuthService {
   }
 
   async login(loginDto: UserLoginDto) {
-    const { username, password } = loginDto;
+    const { email, password } = loginDto;
 
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findUserByEmail(email);
     if (!user) {
       throw new BadRequestException('User not found');
     }
@@ -66,7 +69,7 @@ export class AuthService {
     }
 
     const payload = {
-      username: user.username,
+      email: user.email,
       id: user.id,
       roles: user.role,
     };
@@ -77,26 +80,11 @@ export class AuthService {
       accessToken,
       user: {
         id: user.id,
-        username: user.username,
+        email: user.email,
         roles: user.role,
       },
     };
   }
 
-  async upgrade(userId: number) {
-    const user = await this.usersService.findUserById(userId);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    await this.usersService.upgradeToPremium(userId);
-
-    const updatedUser = await this.usersService.findUserById(userId);
-    return {
-      id: updatedUser.id,
-      username: updatedUser.username,
-      roles: updatedUser.role,
-    };
-  }
+  
 }

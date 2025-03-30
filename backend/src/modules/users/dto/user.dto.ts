@@ -1,6 +1,7 @@
 import { Role } from 'src/utils/enums';
 
-export class CreateUserDto {
+export class UserDto {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
