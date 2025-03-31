@@ -20,25 +20,27 @@ export class EntriesService {
       where: { id: categoryId, user: { id: userId } },
       relations: ['user'],
     });
-    
+
     if (!category) {
-      throw new NotFoundException(`Category with ID ${categoryId} not found or doesn't belong to user`);
+      throw new NotFoundException(
+        `Category with ID ${categoryId} not found or doesn't belong to user`,
+      );
     }
-    
+
     const entry = this.entryRepository.create({
       title,
       amount,
       category_id: category.id,
       user_id: userId,
     });
-    
+
     return await this.entryRepository.save(entry);
   }
 
   async findAll(userId: number): Promise<Entry[]> {
-    return await this.entryRepository.find({ 
+    return await this.entryRepository.find({
       where: { user_id: userId },
-      relations: ['category'] 
+      relations: ['category'],
     });
   }
 
@@ -47,11 +49,13 @@ export class EntriesService {
       where: { id, user_id: userId },
       relations: ['category'],
     });
-    
+
     if (!entry) {
-      throw new NotFoundException(`Entry with ID ${id} not found or doesn't belong to user`);
+      throw new NotFoundException(
+        `Entry with ID ${id} not found or doesn't belong to user`,
+      );
     }
-    
+
     return entry;
   }
 
@@ -65,7 +69,9 @@ export class EntriesService {
     });
 
     if (!category) {
-      throw new NotFoundException(`Category with ID ${categoryId} not found or doesn't belong to user`);
+      throw new NotFoundException(
+        `Category with ID ${categoryId} not found or doesn't belong to user`,
+      );
     }
 
     const entries = await this.entryRepository.find({
@@ -85,7 +91,7 @@ export class EntriesService {
     userId: number,
   ): Promise<Entry> {
     await this.findOne(id, userId);
-    
+
     const { categoryId, ...updateData } = updateEntryDto;
 
     if (categoryId) {
@@ -93,14 +99,16 @@ export class EntriesService {
         where: { id: categoryId, user: { id: userId } },
         relations: ['user'],
       });
-      
+
       if (!category) {
-        throw new NotFoundException(`Category with ID ${categoryId} not found or doesn't belong to user`);
+        throw new NotFoundException(
+          `Category with ID ${categoryId} not found or doesn't belong to user`,
+        );
       }
-      
+
       await this.entryRepository.update(
         { id, user_id: userId },
-        { ...updateData, category, category_id: categoryId }
+        { ...updateData, category, category_id: categoryId },
       );
     } else {
       await this.entryRepository.update({ id, user_id: userId }, updateData);
@@ -111,11 +119,13 @@ export class EntriesService {
 
   async remove(id: number, userId: number): Promise<void> {
     const entry = await this.findOne(id, userId);
-    
+
     if (!entry) {
-      throw new NotFoundException(`Entry with ID ${id} not found or doesn't belong to user`);
+      throw new NotFoundException(
+        `Entry with ID ${id} not found or doesn't belong to user`,
+      );
     }
-    
+
     await this.entryRepository.delete({ id, user_id: userId });
   }
 }
