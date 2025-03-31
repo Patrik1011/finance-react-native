@@ -37,6 +37,9 @@ export class AuthMiddleware implements NestMiddleware {
       try {
         // Verify token
         const user = this.jwtService.verify(token);
+
+        console.log('Decoded JWT:', user);
+
         req['user'] = user; // Attach user to request
 
         // For role-specific routes, check user role
