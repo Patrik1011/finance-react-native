@@ -9,4 +9,9 @@ export class UsersController {
   upgrade(@Request() req) {
     return this.usersService.upgradeToPremium(req.user.id);
   }
+
+  @Post('downgrade')
+  downgrade(@Request() req) {
+    return this.usersService.downgradeToBasic(req.user.id);
+  }
 }

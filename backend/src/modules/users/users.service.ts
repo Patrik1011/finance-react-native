@@ -4,19 +4,20 @@ import { Role } from 'src/utils/enums';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserDto)
-    private userRepository: Repository<UserDto>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async findUserById(id: number): Promise<UserDto> {
+  async findUserById(id: number): Promise<User> {
     return this.userRepository.findOne({ where: { id: id } });
   }
 
-  async findUserByEmail(email: string): Promise<UserDto> {
+  async findUserByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { email: email },
     });
@@ -39,7 +40,7 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<UserDto[]> {
+  async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
@@ -53,6 +54,25 @@ export class UsersService {
     }
 
     user.role = Role.PREMIUM_USER;
+
+    const updatedUser = await this.userRepository.save(user);
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      role: updatedUser.role,
+    };
+  }
+
+  async downgradeToBasic(userId: number): Promise<Partial<UserDto>> {
+    const user = await this.findUserById(userId);
+
+    if (!user) throw new Error('User not found');
+
+    if (user.role === Role.USER) {
+      throw new Error('User is already a basic user');
+    }
+
+    user.role = Role.USER;
 
     const updatedUser = await this.userRepository.save(user);
     return {
