@@ -1,6 +1,7 @@
 import { Role } from 'src/utils/enums';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Category } from './category.entity';
+import { Entry } from './entry.entity';
 
 @Entity()
 export class User {
@@ -31,4 +32,7 @@ export class User {
 
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];
+
+  @OneToMany(() => Entry, (entry) => entry.user)
+  entries: Entry[];
 }

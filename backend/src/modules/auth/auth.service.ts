@@ -1,7 +1,8 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -12,13 +13,34 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserSignupDto } from './dto/user-signup.dto';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
+
+  generateToken(user: User) {
+    const payload = {
+      email: user.email,
+      id: user.id,
+      roles: user.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        roles: user.role,
+      },
+    };
+  }
 
   async signup(signupDto: UserSignupDto) {
     const { firstName, lastName, email, username, password, role } = signupDto;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEntryDto } from './dto/create-entry.dto';
@@ -14,43 +14,69 @@ export class EntriesService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  async create(createEntryDto: CreateEntryDto): Promise<Entry> {
+  async create(createEntryDto: CreateEntryDto, userId: number): Promise<Entry> {
     const { title, amount, categoryId } = createEntryDto;
     const category = await this.categoryRepository.findOne({
-      where: { id: categoryId },
+      where: { id: categoryId, user: { id: userId } },
+      relations: ['user'],
     });
+
     if (!category) {
-      throw new Error('Category not found');
+      throw new NotFoundException(
+        `Category with ID ${categoryId} not found or doesn't belong to user`,
+      );
     }
+
     const entry = this.entryRepository.create({
       title,
       amount,
       category_id: category.id,
+      user_id: userId,
     });
+
     return await this.entryRepository.save(entry);
   }
 
-  async findAll(): Promise<Entry[]> {
-    return await this.entryRepository.find({ relations: ['category'] });
+  async findAll(userId: number): Promise<Entry[]> {
+    return await this.entryRepository.find({
+      where: { user_id: userId },
+      relations: ['category'],
+    });
   }
 
-  async findOne(id: number): Promise<Entry> {
-    return await this.entryRepository.findOneBy({ id });
+  async findOne(id: number, userId: number): Promise<Entry> {
+    const entry = await this.entryRepository.findOne({
+      where: { id, user_id: userId },
+      relations: ['category'],
+    });
+
+    if (!entry) {
+      throw new NotFoundException(
+        `Entry with ID ${id} not found or doesn't belong to user`,
+      );
+    }
+
+    return entry;
   }
 
   async getEntriesByCategory(
     categoryId: number,
+    userId: number,
   ): Promise<{ category: Category; entries: Entry[] }> {
     const category = await this.categoryRepository.findOne({
-      where: { id: categoryId },
+      where: { id: categoryId, user: { id: userId } },
+      relations: ['user'],
     });
 
     if (!category) {
-      throw new Error('Category not found');
+      throw new NotFoundException(
+        `Category with ID ${categoryId} not found or doesn't belong to user`,
+      );
     }
 
     const entries = await this.entryRepository.find({
-      where: { category: { id: categoryId } },
+      where: { category_id: categoryId, user_id: userId },
+      relations: ['category'],
     });
 
     return {
@@ -62,25 +88,44 @@ export class EntriesService {
   async update(
     id: number,
     updateEntryDto: Partial<CreateEntryDto>,
+    userId: number,
   ): Promise<Entry> {
+    await this.findOne(id, userId);
+
     const { categoryId, ...updateData } = updateEntryDto;
 
     if (categoryId) {
       const category = await this.categoryRepository.findOne({
-        where: { id: categoryId },
+        where: { id: categoryId, user: { id: userId } },
+        relations: ['user'],
       });
+
       if (!category) {
-        throw new Error('Category not found');
+        throw new NotFoundException(
+          `Category with ID ${categoryId} not found or doesn't belong to user`,
+        );
       }
-      await this.entryRepository.update(id, { ...updateData, category });
+
+      await this.entryRepository.update(
+        { id, user_id: userId },
+        { ...updateData, category, category_id: categoryId },
+      );
     } else {
-      await this.entryRepository.update(id, updateData);
+      await this.entryRepository.update({ id, user_id: userId }, updateData);
     }
 
-    return this.findOne(id);
+    return this.findOne(id, userId);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.entryRepository.delete(id);
+  async remove(id: number, userId: number): Promise<void> {
+    const entry = await this.findOne(id, userId);
+
+    if (!entry) {
+      throw new NotFoundException(
+        `Entry with ID ${id} not found or doesn't belong to user`,
+      );
+    }
+
+    await this.entryRepository.delete({ id, user_id: userId });
   }
 }
