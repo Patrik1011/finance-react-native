@@ -7,7 +7,7 @@ dotenv.config();
 
 type PayloadDto = {
   id: number;
-  username: string;
+  email: string;
   roles: Role[];
 };
 
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: PayloadDto) {
     return {
       id: payload.id,
-      username: payload.username,
+      email: payload.email,
       roles: payload.roles,
     };
   }
