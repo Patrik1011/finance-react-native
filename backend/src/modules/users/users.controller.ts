@@ -9,7 +9,7 @@ export class UsersController {
 
   @Post('upgrade')
   upgrade(@Request() req) {
-   return this.usersService.upgradeToPremium(req.user.id);
+    return this.usersService.upgradeToPremium(req.user.id);
   }
 
   @Post('downgrade')
@@ -17,9 +17,9 @@ export class UsersController {
     return this.usersService.downgradeToBasic(req.user.id);
   }
 
-   @Get()
-    @HttpCode(200)
-    async findAll(@UserId() userId: number): Promise<User> {
-      return await this.usersService.findUserById(userId);
-    }
+  @Get()
+  @HttpCode(200)
+  async findAll(@UserId() userId: number): Promise<User> {
+    return await this.usersService.findUserById(userId);
+  }
 }

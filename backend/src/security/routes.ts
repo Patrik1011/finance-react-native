@@ -14,7 +14,6 @@ type RouteAccess = {
 };
 
 export const routeAccessMap: RouteAccess[] = [
-  
   { pattern: '/auth/login/', method: 'POST', access: AccessType.PUBLIC },
   { pattern: '/auth/signup/', method: 'POST', access: AccessType.PUBLIC },
   { pattern: '/auth/create-admin/', method: 'POST', access: AccessType.PUBLIC },
@@ -27,8 +26,16 @@ export const routeAccessMap: RouteAccess[] = [
 
   { pattern: '/categories/', method: 'POST', access: AccessType.USER },
   { pattern: '/categories/', method: 'GET', access: AccessType.USER },
-  { pattern: '/categories/:id', method: 'PUT', access: AccessType.PREMIUM_USER },
-  { pattern: '/categories/:id', method: 'DELETE', access: AccessType.PREMIUM_USER },
+  {
+    pattern: '/categories/:id',
+    method: 'PUT',
+    access: AccessType.PREMIUM_USER,
+  },
+  {
+    pattern: '/categories/:id',
+    method: 'DELETE',
+    access: AccessType.PREMIUM_USER,
+  },
 
   { pattern: '/entries/', method: 'POST', access: AccessType.USER },
   { pattern: '/entries/:id', method: 'GET', access: AccessType.USER },
@@ -81,20 +88,31 @@ export function getAccessLevel(path: string, method: string): AccessType {
   return wildcard ? wildcard.access : AccessType.USER;
 }
 
-export function canAccess(userRoles: Role[], requiredAccess: AccessType): boolean {
+export function canAccess(
+  userRoles: Role[],
+  requiredAccess: AccessType,
+): boolean {
   if (requiredAccess === AccessType.PUBLIC) return true;
-  
+
   if (userRoles.includes(Role.ADMIN)) return true;
-  
+
   // Premium users can access USER and PREMIUM_USER routes
-  if (requiredAccess === AccessType.USER && userRoles.includes(Role.PREMIUM_USER)) return true;
-  
+  if (
+    requiredAccess === AccessType.USER &&
+    userRoles.includes(Role.PREMIUM_USER)
+  )
+    return true;
+
   // For PREMIUM_USER access, user must have PREMIUM_USER role
-  if (requiredAccess === AccessType.PREMIUM_USER && userRoles.includes(Role.PREMIUM_USER)) return true;
-  
+  if (
+    requiredAccess === AccessType.PREMIUM_USER &&
+    userRoles.includes(Role.PREMIUM_USER)
+  )
+    return true;
+
   // For USER access, basic authentication is enough (handled by middleware)
   if (requiredAccess === AccessType.USER) return true;
-  
+
   return false;
 }
 

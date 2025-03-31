@@ -22,7 +22,10 @@ export class CategoriesController {
 
   @Post()
   @HttpCode(201)
-  async create(@Body() categoryDto: CreateCategoryDto, @UserId() userId: number): Promise<Category> {
+  async create(
+    @Body() categoryDto: CreateCategoryDto,
+    @UserId() userId: number,
+  ): Promise<Category> {
     return await this.categoriesService.create(categoryDto, userId);
   }
 
@@ -46,7 +49,10 @@ export class CategoriesController {
   @Delete(':id')
   @HttpCode(204)
   @UseGuards(PremiumUserGuard)
-  async remove(@Param('id') id: number, @UserId() userId: number,): Promise<void> {
+  async remove(
+    @Param('id') id: number,
+    @UserId() userId: number,
+  ): Promise<void> {
     await this.categoriesService.remove(id, userId);
   }
 }
