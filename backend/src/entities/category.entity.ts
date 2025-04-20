@@ -27,9 +27,6 @@ export class Category {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ nullable: false })
-  userId: number;
-
   @OneToMany(() => Entry, (entry) => entry.category)
   entries: Entry[];
 }

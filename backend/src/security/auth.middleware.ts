@@ -5,67 +5,76 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
-import { AccessType, accessTypeToRoles, getAccessLevel } from './routes';
+import { AccessType, getAccessLevel } from './routes';
+import { Role } from 'src/utils/enums';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
+    // Get the full path and method
+    const fullPath = req.baseUrl + req.path;
+    const method = req.method;
+
+    // Check access level required for this path
+    const accessLevel = getAccessLevel(fullPath, method);
+
+    // Allow public routes to pass through
+    if (accessLevel === AccessType.Public) {
+      return next();
+    }
+
+    // Validate auth header format
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Authentication required');
+    }
+
+    const token = authHeader.substring(7);
+
     try {
-      // Get the full path by combining baseUrl and path
-      const fullPath = req.baseUrl + req.path;
-      const method = req.method;
+      // Verify token and attach user to request
+      const user = this.jwtService.verify(token);
 
-      // Check access level required for this path
-      const accessLevel = getAccessLevel(fullPath, method);
+      console.log('User:', decodeURIComponent(JSON.stringify(user)));
 
-      // If it's a public route, skip authentication
-      if (accessLevel === AccessType.PUBLIC) {
-        return next();
-      }
-
-      // For non-public routes, verify JWT token
-      const authHeader = req.headers.authorization;
-
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new UnauthorizedException('Authentication required');
-      }
-
-      const token = authHeader.substring(7);
-
-      try {
-        // Verify token
-        const user = this.jwtService.verify(token);
-        req['user'] = user; // Attach user to request
-
-        // For role-specific routes, check user role
-        if (
-          accessLevel === AccessType.PREMIUM_USER ||
-          accessLevel === AccessType.ADMIN
-        ) {
-          const requiredRoles = accessTypeToRoles[accessLevel];
-          const userRole = user.role;
-
-          // Check if user has required role
-          const hasAccess = requiredRoles.some((role) => role === userRole);
-
-          if (!hasAccess) {
-            throw new UnauthorizedException('Insufficient permissions');
+      req['user'] = user;
+      
+      // Check if user has sufficient permissions for the requested resource
+      switch (accessLevel) {
+        case AccessType.User:
+          // Any authenticated user can access USER level resources
+          break;
+        
+        case AccessType.PremiumUser:
+          console.log('User role:', user.roles);
+          console.log('Access type:', accessLevel);
+          // Only premium users and admins can access PREMIUM_USER resources
+          if (user.roles !== Role.PremiumUser) {
+            throw new UnauthorizedException('Premium subscription required');
           }
-        }
-
-        next();
-      } catch (error) {
-        if (
-          error.name === 'JsonWebTokenError' ||
-          error.name === 'TokenExpiredError'
-        ) {
-          throw new UnauthorizedException('Invalid or expired token');
-        }
+          break;
+        
+        case AccessType.Admin:
+          // Only admins can access ADMIN resources
+          if (user.roles !== Role.Admin) {
+            throw new UnauthorizedException('Admin privileges required');
+          }
+          break;
+      }
+      
+      next();
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
         throw error;
       }
-    } catch (error) {
+      
+      // Standardize JWT errors
+      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Invalid or expired token');
+      }
+      
       throw error;
     }
   }

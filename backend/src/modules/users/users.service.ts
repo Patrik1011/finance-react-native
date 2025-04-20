@@ -49,11 +49,11 @@ export class UsersService {
 
     if (!user) throw new Error('User not found');
 
-    if (user.role === Role.PREMIUM_USER) {
+    if (user.role === Role.PremiumUser) {
       throw new Error('User is already a premium user');
     }
 
-    user.role = Role.PREMIUM_USER;
+    user.role = Role.PremiumUser;
 
     const updatedUser = await this.userRepository.save(user);
     return {
@@ -68,11 +68,11 @@ export class UsersService {
 
     if (!user) throw new Error('User not found');
 
-    if (user.role === Role.USER) {
+    if (user.role === Role.User) {
       throw new Error('User is already a basic user');
     }
 
-    user.role = Role.USER;
+    user.role = Role.User;
 
     const updatedUser = await this.userRepository.save(user);
     return {

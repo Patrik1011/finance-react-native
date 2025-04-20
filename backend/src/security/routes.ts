@@ -1,79 +1,41 @@
-import { Role } from 'src/utils/enums';
-
 export enum AccessType {
-  PUBLIC = 'public',
-  USER = 'user',
-  PREMIUM_USER = 'premium-user',
-  ADMIN = 'admin',
+  Public = 'PUBLIC',
+  User = 'USER',
+  PremiumUser = 'PREMIUM_USER',
+  Admin = 'ADMIN',
 }
 
 type RouteAccess = {
-  pattern: string;
+  pattern: RegExp;
   method: string;
   access: AccessType;
 };
 
+// Define routes with RegExp patterns directly
 export const routeAccessMap: RouteAccess[] = [
-  { pattern: '/auth/login/', method: 'POST', access: AccessType.PUBLIC },
-  { pattern: '/auth/signup/', method: 'POST', access: AccessType.PUBLIC },
-  { pattern: '/auth/create-admin/', method: 'POST', access: AccessType.PUBLIC },
+  { pattern: /^\/auth\/login\/?$/, method: 'POST', access: AccessType.Public },
+  { pattern: /^\/auth\/signup\/?$/, method: 'POST', access: AccessType.Public },
+  { pattern: /^\/auth\/create-admin\/?$/, method: 'POST', access: AccessType.Public },
 
-  { pattern: '/users/upgrade/', method: 'POST', access: AccessType.USER },
-  {
-    pattern: 'users/downgrade/',
-    method: 'POST',
-    access: AccessType.PREMIUM_USER,
-  },
-
-  // Default - require authentication
-  { pattern: '/*', method: '*', access: AccessType.USER },
+  { pattern: /^\/users\/upgrade\/?$/, method: 'POST', access: AccessType.User },
+  { pattern: /^\/users\/downgrade\/?$/, method: 'POST', access: AccessType.PremiumUser },
+  
+  { pattern: /^\/categories\/?$/, method: 'POST', access: AccessType.PremiumUser },
 ];
 
-// Function to get access level for a specific route
+// Default access level when no route matches
+const DEFAULT_ACCESS = AccessType.User;
+
+// Function to get access level
 export function getAccessLevel(path: string, method: string): AccessType {
-  // Ensure path starts with a forward slash for consistency
+  // Ensure path starts with a forward slash
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-
-  // First check for exact matches
-  const exactMatch = routeAccessMap.find(
-    (route) =>
-      route.pattern === normalizedPath &&
-      (route.method === method || route.method === '*'),
+  
+  // Find the first matching route
+  const match = routeAccessMap.find(route => 
+    route.pattern.test(normalizedPath) && 
+    (route.method === method || route.method === '*')
   );
-
-  if (exactMatch) {
-    return exactMatch.access;
-  }
-
-  // Then check for pattern matches (with params)
-  for (const route of routeAccessMap) {
-    // Skip the wildcard route until the end
-    if (route.pattern === '/*') continue;
-
-    // Convert route pattern to regex
-    // Replace :paramName with regex for matching params
-    const regexPattern = route.pattern
-      .replace(/:[^\/]+/g, '[^/]+')
-      .replace(/\//g, '\\/');
-
-    const regex = new RegExp(`^${regexPattern}$`);
-
-    if (
-      regex.test(normalizedPath) &&
-      (route.method === method || route.method === '*')
-    ) {
-      return route.access;
-    }
-  }
-
-  // Default to the wildcard route
-  const wildcard = routeAccessMap.find((route) => route.pattern === '/*');
-  return wildcard ? wildcard.access : AccessType.USER;
+  
+  return match ? match.access : DEFAULT_ACCESS;
 }
-
-export const accessTypeToRoles = {
-  [AccessType.PUBLIC]: null,
-  [AccessType.USER]: [],
-  [AccessType.PREMIUM_USER]: [Role.PREMIUM_USER],
-  [AccessType.ADMIN]: [Role.ADMIN],
-};

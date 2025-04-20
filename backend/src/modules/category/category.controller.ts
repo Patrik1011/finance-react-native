@@ -11,7 +11,7 @@ import {
 import { CategoryService } from './category.service';
 import { Category } from 'src/entities/category.entity';
 
-@Controller('category')
+@Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
