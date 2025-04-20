@@ -40,13 +40,13 @@ export class AuthMiddleware implements NestMiddleware {
       console.log('User:', decodeURIComponent(JSON.stringify(user)));
 
       req['user'] = user;
-      
+
       // Check if user has sufficient permissions for the requested resource
       switch (accessLevel) {
         case AccessType.User:
           // Any authenticated user can access USER level resources
           break;
-        
+
         case AccessType.PremiumUser:
           console.log('User role:', user.roles);
           console.log('Access type:', accessLevel);
@@ -55,7 +55,7 @@ export class AuthMiddleware implements NestMiddleware {
             throw new UnauthorizedException('Premium subscription required');
           }
           break;
-        
+
         case AccessType.Admin:
           // Only admins can access ADMIN resources
           if (user.roles !== Role.Admin) {
@@ -63,18 +63,21 @@ export class AuthMiddleware implements NestMiddleware {
           }
           break;
       }
-      
+
       next();
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-      
+
       // Standardize JWT errors
-      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      if (
+        error.name === 'JsonWebTokenError' ||
+        error.name === 'TokenExpiredError'
+      ) {
         throw new UnauthorizedException('Invalid or expired token');
       }
-      
+
       throw error;
     }
   }
