@@ -56,3 +56,4 @@ export class CategoriesService {
     await this.categoryRepository.delete(id);
   }
 }
+

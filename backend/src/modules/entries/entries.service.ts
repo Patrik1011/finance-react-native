@@ -80,3 +80,4 @@ export class EntriesService {
     await this.entryRepository.delete(id);
   }
 }
+
