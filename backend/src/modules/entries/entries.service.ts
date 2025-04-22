@@ -30,10 +30,6 @@ export class EntriesService {
     return await this.entryRepository.save(entry);
   }
 
-  async findAll(): Promise<Entry[]> {
-    return await this.entryRepository.find({ relations: ['category'] });
-  }
-
   async findOne(id: number): Promise<Entry> {
     return await this.entryRepository.findOneBy({ id });
   }

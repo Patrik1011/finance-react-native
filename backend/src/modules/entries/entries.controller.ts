@@ -26,14 +26,6 @@ export class EntriesController {
     return await this.entriesService.create(entryDto);
   }
 
-  @Get()
-  @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
-  async findAll(): Promise<Entry[]> {
-    console.log('categories');
-    return await this.entriesService.findAll();
-  }
-
   @Get('category/:categoryId')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
