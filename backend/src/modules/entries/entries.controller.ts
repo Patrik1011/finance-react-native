@@ -7,11 +7,13 @@ import {
   Put,
   Delete,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { EntriesService } from './entries.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { Entry } from 'src/entities/entry.entity';
 import { Category } from 'src/entities/category.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('entries')
 export class EntriesController {
@@ -19,12 +21,14 @@ export class EntriesController {
 
   @Post()
   @HttpCode(201)
+  @UseGuards(JwtAuthGuard)
   async create(@Body() entryDto: CreateEntryDto): Promise<Entry> {
     return await this.entriesService.create(entryDto);
   }
 
   @Get()
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
   async findAll(): Promise<Entry[]> {
     console.log('categories');
     return await this.entriesService.findAll();
@@ -32,6 +36,7 @@ export class EntriesController {
 
   @Get('category/:categoryId')
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
   async getEntriesByCategory(
     @Param('categoryId') id: number,
   ): Promise<{ category: Category; entries: Entry[] }> {
@@ -40,6 +45,7 @@ export class EntriesController {
 
   @Put(':id')
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: number,
     @Body() updateEntryDto: Partial<CreateEntryDto>,
@@ -49,6 +55,7 @@ export class EntriesController {
 
   @Delete(':id')
   @HttpCode(204)
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: number): Promise<void> {
     await this.entriesService.remove(id);
   }

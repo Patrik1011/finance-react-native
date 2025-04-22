@@ -1,34 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from 'src/entities/category.entity';
+import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { Category } from 'src/entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(categoryDto: CreateCategoryDto): Promise<Category> {
-    const newCategory = this.categoryRepository.create(categoryDto);
+  async create(
+    createCategoryDto: CreateCategoryDto,
+    userId: number,
+  ): Promise<Category> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    const newCategory = {
+      title: createCategoryDto.title,
+      description: createCategoryDto.description,
+      color: createCategoryDto.color,
+      user_id: user.id,
+    };
+
     return await this.categoryRepository.save(newCategory);
   }
 
-  async findAll(): Promise<Category[]> {
-    const categories = await this.categoryRepository.find();
-    return categories;
+  async findAllByUserId(userId: number): Promise<Category[]> {
+    return await this.categoryRepository.find({
+      where: { user: { id: userId } },
+      // relations: ['user']
+    });
   }
 
   async findOne(id: number): Promise<Category> {
-    return await this.categoryRepository.findOneBy({ id });
+    return await this.categoryRepository.findOne({
+      where: { id },
+    });
   }
 
-  async update(
-    id: number,
-    updateCategoryDto: Partial<CreateCategoryDto>,
-  ): Promise<Category> {
+  async update(id: number, updateCategoryDto: Category): Promise<Category> {
     await this.categoryRepository.update(id, updateCategoryDto);
     return this.findOne(id);
   }

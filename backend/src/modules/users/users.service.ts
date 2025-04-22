@@ -66,6 +66,8 @@ export class UsersService {
   async downgradeToBasic(userId: number): Promise<Partial<UserDto>> {
     const user = await this.findUserById(userId);
 
+    console.log('user', user);
+
     if (!user) throw new Error('User not found');
 
     if (user.role === Role.User) {
