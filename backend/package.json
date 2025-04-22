@@ -22,7 +22,9 @@
     "migration:generate": "npm run typeorm -- migration:generate",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:show": "npm run typeorm -- migration:show",
-    "migration:revert": "npm run typeorm -- migration:revert"
+    "migration:run-latest": "npm run typeorm -- migration:run -- -n latest",
+    "migration:revert": "npm run typeorm -- migration:revert",
+    "migration:drop": "npm run typeorm -- migration:drop"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

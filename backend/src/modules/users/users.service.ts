@@ -1,22 +1,16 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from 'src/utils/enums';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from 'src/entities/user.entity';
-import { AuthService } from '../auth/auth.service';
-
-//Circular dependency what is this?
-// Circular dependency is when two or more modules depend on each other directly or indirectly.
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @Inject(forwardRef(() => AuthService))
-    private authService: AuthService,
   ) {}
 
   async findUserById(id: number): Promise<User> {
@@ -50,37 +44,43 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async upgradeToPremium(userId: number) {
+  async upgradeToPremium(userId: number): Promise<Partial<UserDto>> {
     const user = await this.findUserById(userId);
 
     if (!user) throw new Error('User not found');
 
-    if (user.role === Role.PREMIUM_USER) {
+    if (user.role === Role.PremiumUser) {
       throw new Error('User is already a premium user');
     }
 
-    user.role = Role.PREMIUM_USER;
+    user.role = Role.PremiumUser;
 
     const updatedUser = await this.userRepository.save(user);
-
-    // Generate new token with updated role
-    return this.authService.generateToken(updatedUser);
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      role: updatedUser.role,
+    };
   }
 
-  async downgradeToBasic(userId: number) {
+  async downgradeToBasic(userId: number): Promise<Partial<UserDto>> {
     const user = await this.findUserById(userId);
+
+    console.log('user', user);
 
     if (!user) throw new Error('User not found');
 
-    if (user.role === Role.USER) {
+    if (user.role === Role.User) {
       throw new Error('User is already a basic user');
     }
 
-    user.role = Role.USER;
+    user.role = Role.User;
 
     const updatedUser = await this.userRepository.save(user);
-
-    // Generate new token with updated role
-    return this.authService.generateToken(updatedUser);
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      role: updatedUser.role,
+    };
   }
 }

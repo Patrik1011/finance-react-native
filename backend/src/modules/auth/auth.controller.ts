@@ -15,13 +15,13 @@ export class AuthController {
 
   @Post('signup')
   signup(@Body() signUpDto: UserSignupDto) {
-    signUpDto.role = Role.USER;
+    signUpDto.role = Role.User;
     return this.authService.signup(signUpDto);
   }
 
   @Post('create-admin')
   createAdmin(@Body() signUpDto: UserSignupDto) {
-    signUpDto.role = Role.ADMIN;
+    signUpDto.role = Role.Admin;
     return this.authService.signup(signUpDto);
   }
 }
