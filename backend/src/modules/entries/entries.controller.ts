@@ -14,6 +14,7 @@ import { CreateEntryDto } from './dto/create-entry.dto';
 import { Entry } from 'src/entities/entry.entity';
 import { Category } from 'src/entities/category.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PremiumUser } from '../auth/decorators/premium-user.decorator';
 
 @Controller('entries')
 export class EntriesController {
@@ -37,7 +38,7 @@ export class EntriesController {
 
   @Put(':id')
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
+  @PremiumUser()
   async update(
     @Param('id') id: number,
     @Body() updateEntryDto: Partial<CreateEntryDto>,

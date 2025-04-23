@@ -14,6 +14,7 @@ import { Category } from 'src/entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CategoriesService } from './categories.service';
+import { PremiumUser } from '../auth/decorators/premium-user.decorator';
 
 @Controller('categories')
 export class CategoriesController {
@@ -43,7 +44,7 @@ export class CategoriesController {
 
   @Put(':id')
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
+  @PremiumUser()
   async update(
     @Param('id') id: number,
     @Body() updateCategoryDto: Category,
