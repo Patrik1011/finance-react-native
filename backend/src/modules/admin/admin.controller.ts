@@ -1,12 +1,18 @@
-import { Controller, Get, Delete, Param, ParseIntPipe, HttpStatus, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Delete,
+  Param,
+  ParseIntPipe,
+  HttpStatus,
+  HttpCode,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { User } from 'src/entities/user.entity';
 
 @Controller('admin')
 export class AdminController {
-  constructor(
-    private readonly adminService: AdminService
-  ) {}
+  constructor(private readonly adminService: AdminService) {}
 
   @Get('users')
   @HttpCode(HttpStatus.OK)
