@@ -22,15 +22,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: PayloadDto) {
-
-    const userRole = payload.role; 
-
-    console.log('JWT Payload:', payload);
-
     return {
       id: payload.id,
       email: payload.email,
-      role: userRole,
+      role: payload.role,
     };
   }
 }

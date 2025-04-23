@@ -12,13 +12,11 @@ export class PremiumUserGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    console.log('User:', user.role);
-
     if (!user) {
       throw new ForbiddenException('User not authenticated');
     }
 
-    if (!user.role || user.role !== Role.PremiumUser) {
+    if (user.role !== Role.PremiumUser) {
       throw new ForbiddenException('Premium subscription required');
     }
 
