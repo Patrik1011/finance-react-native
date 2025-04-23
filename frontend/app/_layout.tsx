@@ -19,8 +19,7 @@ import store from '@/redux/store';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+const RootLayout = () => {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -39,7 +38,7 @@ export default function RootLayout() {
     <Provider store={store}>
       <GluestackUIProvider mode="light">
         <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          value={DefaultTheme}
         >
           <NavigationTabs />
           <StatusBar style="auto" />
@@ -48,3 +47,5 @@ export default function RootLayout() {
     </Provider>
   );
 }
+
+export default RootLayout;

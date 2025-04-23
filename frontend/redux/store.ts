@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import entryReducer from './entrySlice';
-import { thunk } from 'redux-thunk';
 
 const store = configureStore({
   reducer: {
     entry: entryReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Add any serializable check options if needed
+      },
+    }),
 });
 
 export default store;
