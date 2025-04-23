@@ -9,8 +9,10 @@ import {
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { User } from 'src/entities/user.entity';
+import { Admin } from '../auth/decorators/admin.decorator';
 
 @Controller('admin')
+@Admin()
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
