@@ -8,7 +8,6 @@ import { EntriesModule } from './modules/entries/entries.module';
 import { dbConfig } from '../db.service';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthMiddleware } from './security/auth.middleware';
 import { LoggerMiddleware } from './loggers/logger.middleware';
 import { AdminModule } from './modules/admin/admin.module';
 

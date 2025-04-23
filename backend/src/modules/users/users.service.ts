@@ -14,7 +14,7 @@ export class UsersService {
   ) {}
 
   async findUserById(id: number): Promise<User> {
-    return this.userRepository.findOne({ where: { id: id } });
+    return this.userRepository.findOne({ where: { id: id }, select: ['id', 'email', 'role'] });
   }
 
   async findUserByEmail(email: string): Promise<User> {
@@ -65,8 +65,6 @@ export class UsersService {
 
   async downgradeToBasic(userId: number): Promise<Partial<UserDto>> {
     const user = await this.findUserById(userId);
-
-    console.log('user', user);
 
     if (!user) throw new Error('User not found');
 
