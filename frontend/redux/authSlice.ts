@@ -34,11 +34,11 @@ export const login = createAsyncThunk(
     try {
       // Use fetchClient properly according to its definition
       const response = await fetchClient<{ accessToken: string; user: User }>(
-        '/auth/login', 
+        '/auth/login',
         {
           method: 'POST',
-          body: credentials
-        }
+          body: credentials,
+        },
       );
 
       // Store token in secure storage

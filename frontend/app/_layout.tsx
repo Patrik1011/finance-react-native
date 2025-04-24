@@ -26,7 +26,7 @@ const InitialLayout = () => {
   const router = useRouter();
 
   useEffect(() => {
-              const checkAuth = async () => {
+    const checkAuth = async () => {
       await dispatch(checkAuthState());
     };
 
@@ -37,11 +37,15 @@ const InitialLayout = () => {
     if (loading) return;
 
     // Check if the current path includes the auth group
-    const inAuthGroup = segments.includes('(auth)') || segments.some(segment => segment === 'login');
+    const inAuthGroup =
+      segments.includes('(auth)') ||
+      segments.some((segment) => segment === 'login');
 
     if (!isAuthenticated && !inAuthGroup) {
       // Redirect to login if not authenticated and not already on login screen
-      router.replace('/(auth)/login' as unknown as Parameters<typeof router.replace>[0]);
+      router.replace(
+        '/(auth)/login' as unknown as Parameters<typeof router.replace>[0],
+      );
     } else if (isAuthenticated && inAuthGroup) {
       // Redirect to main app if authenticated but on login screen
       router.replace('/_app-layout');

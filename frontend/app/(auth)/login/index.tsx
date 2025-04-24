@@ -46,7 +46,7 @@ export default function LoginScreen() {
       <View className="space-y-4">
         <View>
           <Input>
-            <InputField 
+            <InputField
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
@@ -59,7 +59,7 @@ export default function LoginScreen() {
 
         <View>
           <Input>
-            <InputField 
+            <InputField
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
