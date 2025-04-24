@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
 import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from '@/components/ui/button';
 import { useRouter } from 'expo-router';
@@ -13,24 +19,24 @@ export default function SignupScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const router = useRouter();
 
   const validateForm = () => {
-    if (!firstName.trim()) return "First name is required";
-    if (!lastName.trim()) return "Last name is required";
-    if (!email.trim()) return "Email is required";
-    if (!username.trim()) return "Username is required";
-    if (!password.trim()) return "Password is required";
-    if (password !== confirmPassword) return "Passwords do not match";
-    
+    if (!firstName.trim()) return 'First name is required';
+    if (!lastName.trim()) return 'Last name is required';
+    if (!email.trim()) return 'Email is required';
+    if (!username.trim()) return 'Username is required';
+    if (!password.trim()) return 'Password is required';
+    if (password !== confirmPassword) return 'Passwords do not match';
+
     // Simple email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return "Please enter a valid email address";
-    
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+
     return null;
   };
 
@@ -51,14 +57,14 @@ export default function SignupScreen() {
         email,
         username,
         password,
-        role: Role.User 
+        role: Role.User,
       };
 
       await fetchClient('/auth/signup', {
         method: 'POST',
         body: signupData,
       });
-      
+
       // On successful signup, navigate to login screen
       router.replace('/(auth)/login');
     } catch (err: any) {
@@ -87,8 +93,7 @@ export default function SignupScreen() {
         )}
 
         <View className="space-y-3">
-          
-        <View>
+          <View>
             <Input className="bg-background-100 rounded-lg h-14">
               <InputField
                 placeholder="First Name"
@@ -173,12 +178,16 @@ export default function SignupScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <ButtonText className="text-white font-medium">Create Account</ButtonText>
+              <ButtonText className="text-white font-medium">
+                Create Account
+              </ButtonText>
             )}
           </Button>
 
           <View className="flex-row justify-center mt-4">
-            <Text className="text-typography-600">Already have an account? </Text>
+            <Text className="text-typography-600">
+              Already have an account?{' '}
+            </Text>
             <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
               <Text className="text-primary-600 font-medium">Sign In</Text>
             </TouchableOpacity>

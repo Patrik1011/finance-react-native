@@ -44,50 +44,50 @@ export default function LoginScreen() {
       )}
 
       <View>
-          <Input className="bg-background-100 rounded-lg h-14">
-            <InputField
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 p-4 text-base"
-            />
-          </Input>
-        </View>
-
-        <View className='mt-2'>
-          <Input className="bg-background-100 rounded-lg h-14">
-            <InputField
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 p-4 text-base"
-            />
-          </Input>
-        </View>
-
-        <Button
-          onPress={handleLogin}
-          disabled={loading}
-          className="bg-primary-500 rounded-lg mt-2"
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <ButtonText className="text-white font-medium">Sign In</ButtonText>
-          )}
-        </Button>
-
-        <View className="flex-row justify-center mt-4">
-          <Text className="text-typography-600">Don't have an account? </Text>
-          <TouchableOpacity onPress={() => router.replace('/(auth)/signup')}>
-            <Text className="text-primary-600 font-medium">Sign Up</Text>
-          </TouchableOpacity>
-        </View>
+        <Input className="bg-background-100 rounded-lg h-14">
+          <InputField
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            placeholderTextColor="#9CA3AF"
+            className="flex-1 p-4 text-base"
+          />
+        </Input>
       </View>
+
+      <View className="mt-2">
+        <Input className="bg-background-100 rounded-lg h-14">
+          <InputField
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            placeholderTextColor="#9CA3AF"
+            className="flex-1 p-4 text-base"
+          />
+        </Input>
+      </View>
+
+      <Button
+        onPress={handleLogin}
+        disabled={loading}
+        className="bg-primary-500 rounded-lg mt-2"
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <ButtonText className="text-white font-medium">Sign In</ButtonText>
+        )}
+      </Button>
+
+      <View className="flex-row justify-center mt-4">
+        <Text className="text-typography-600">Don't have an account? </Text>
+        <TouchableOpacity onPress={() => router.replace('/(auth)/signup')}>
+          <Text className="text-primary-600 font-medium">Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
