@@ -1,7 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import ListStack from './(unauthenticated)/categories/category-stack';
-import EntryListStack from './(unauthenticated)/entries/entry-stack';
+import ListStack from './(app)/categories/category-stack';
+import EntryListStack from './(app)/entries/entry-stack';
+import ProfileScreen from './(app)/profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +22,11 @@ const tabConfig: TabConfig[] = [
     name: 'Category',
     icon: 'search',
     component: ListStack,
+  },
+  {
+    name: 'Profile',
+    icon: 'person',
+    component: ProfileScreen,
   },
 ];
 
