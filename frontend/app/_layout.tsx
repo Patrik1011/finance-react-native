@@ -1,8 +1,4 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import '@/global.css';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { useFonts } from 'expo-font';
@@ -11,16 +7,63 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import NavigationTabs from './navigation-tabs';
 
-import { Provider } from 'react-redux';
-import store from '@/redux/store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store, { AppDispatch, RootState } from '@/redux/store';
+import { ActivityIndicator, View } from 'react-native';
+import { Slot, useRouter, useSegments } from 'expo-router';
+import { checkAuthState } from '@/redux/authSlice';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+const InitialLayout = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootState) => state.auth,
+  );
+  const segments: string[] = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      await dispatch(checkAuthState());
+    };
+
+    checkAuth();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (loading) return;
+
+    // Check if the current path includes the auth group
+    const inAuthGroup =
+      segments.includes('(auth)') ||
+      segments.some((segment) => segment === 'login');
+
+    if (!isAuthenticated && !inAuthGroup) {
+      // Redirect to login if not authenticated and not already on login screen
+      router.replace(
+        '/(auth)/login' as unknown as Parameters<typeof router.replace>[0],
+      );
+    } else if (isAuthenticated && inAuthGroup) {
+      // Redirect to main app if authenticated but on login screen
+      router.replace('/_app-layout');
+    }
+  }, [isAuthenticated, loading, segments, router]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  return <Slot />;
+};
+
+const RootLayout = () => {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -38,13 +81,13 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <GluestackUIProvider mode="light">
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <NavigationTabs />
+        <ThemeProvider value={DefaultTheme}>
+          <InitialLayout />
           <StatusBar style="auto" />
         </ThemeProvider>
       </GluestackUIProvider>
     </Provider>
   );
-}
+};
+
+export default RootLayout;
