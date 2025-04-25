@@ -48,7 +48,7 @@ export async function createEntry(entry: Entry): Promise<Entry> {
 
 export async function deleteEntry(id: number): Promise<void> {
   const headers = await createAuthHeaders();
-  await fetchClient(`/entries/${id}`, { 
+  await fetchClient(`/entries/${id}`, {
     method: 'DELETE',
     headers,
   });
@@ -71,7 +71,7 @@ export async function getEntriesByCategory(
     `/entries/category/${categoryId}`,
     {
       headers,
-    }
+    },
   );
   return entries;
 }

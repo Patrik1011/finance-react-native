@@ -39,7 +39,7 @@ export async function createCategory(category: Category): Promise<Category> {
 
 export async function deleteCategory(id: number): Promise<void> {
   const headers = await createAuthHeaders();
-  await fetchClient(`/categories/${id}`, { 
+  await fetchClient(`/categories/${id}`, {
     method: 'DELETE',
     headers,
   });
