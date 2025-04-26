@@ -4,9 +4,18 @@ import { Category } from '@/services/categoryService';
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useCreateCategoryMutation, useUpdateCategoryMutation } from '@/tanstack-query/categories';
+import {
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+} from '@/tanstack-query/categories';
 
 type AddCategoryScreenRouteProp = RouteProp<RootStackParamList, 'AddCategory'>;
 
@@ -56,7 +65,7 @@ export default function AddCategoryScreen() {
           onSuccess: () => {
             navigation.goBack();
           },
-        }
+        },
       );
     } else {
       createMutation.mutate(formData, {
@@ -75,13 +84,13 @@ export default function AddCategoryScreen() {
       <Text className="text-gray-800 font-semibold text-xl pb-4">
         {editingCategory ? 'Edit category' : 'Enter a new category'}
       </Text>
-      
+
       {error && (
         <View className="mb-4 p-2 bg-red-100 rounded">
           <Text className="text-red-600">Error: {error.message}</Text>
         </View>
       )}
-      
+
       <View className="flex gap-y-2">
         <View className="w-full">
           <SearchBar

@@ -1,6 +1,11 @@
-import { Category, createCategory, deleteCategory, getCategories, updateCategory } from '@/services/categoryService';
+import {
+  Category,
+  createCategory,
+  deleteCategory,
+  getCategories,
+  updateCategory,
+} from '@/services/categoryService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
 
 export const categoryKeys = {
   all: ['categories'] as const,
@@ -19,7 +24,7 @@ export function useCategoriesQuery() {
 
 export function useCreateCategoryMutation() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (newCategory: Category) => createCategory(newCategory),
     onSuccess: () => {
@@ -31,9 +36,9 @@ export function useCreateCategoryMutation() {
 // Update category mutation hook
 export function useUpdateCategoryMutation() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ id, category }: { id: number; category: Category }) => 
+    mutationFn: ({ id, category }: { id: number; category: Category }) =>
       updateCategory(id, category),
     onSuccess: (data, { id }) => {
       queryClient.invalidateQueries({ queryKey: categoryKeys.detail(id) });
@@ -44,7 +49,7 @@ export function useUpdateCategoryMutation() {
 
 export function useDeleteCategoryMutation() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (id: number) => deleteCategory(id),
     onSuccess: (_, id) => {

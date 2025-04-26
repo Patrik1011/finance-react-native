@@ -1,4 +1,10 @@
-import { FlatList, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import {
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import { Button, ButtonText } from '@/components/ui/button';
 
@@ -6,14 +12,16 @@ import { Category } from '@/services/categoryService';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/utils/types/navigation';
-import { useCategoriesQuery, useDeleteCategoryMutation } from '@/tanstack-query/categories';
-
+import {
+  useCategoriesQuery,
+  useDeleteCategoryMutation,
+} from '@/tanstack-query/categories';
 
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
 export default function ListScreen() {
   const navigation = useNavigation<ListScreenNavigationProp>();
-  
+
   const { data: categories, isLoading, isError, error } = useCategoriesQuery();
   const deleteMutation = useDeleteCategoryMutation();
 
@@ -57,10 +65,12 @@ export default function ListScreen() {
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
-      
+
       {isError && (
         <View className="py-4">
-          <Text className="text-red-500">Error loading categories: {error?.message}</Text>
+          <Text className="text-red-500">
+            Error loading categories: {error?.message}
+          </Text>
         </View>
       )}
 
@@ -85,7 +95,10 @@ export default function ListScreen() {
                 disabled={deleteMutation.isPending}
               >
                 <Text className="text-white bg-red-500 border border-red-500 p-2 rounded-lg">
-                  {deleteMutation.isPending && item.id === deleteMutation.variables ? 'Deleting...' : 'Delete'}
+                  {deleteMutation.isPending &&
+                  item.id === deleteMutation.variables
+                    ? 'Deleting...'
+                    : 'Delete'}
                 </Text>
               </TouchableOpacity>
             </View>
