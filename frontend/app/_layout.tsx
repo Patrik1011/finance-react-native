@@ -6,8 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
-import NavigationTabs from './navigation-tabs';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { AppDispatch, RootState } from '@/redux/store';
@@ -16,6 +15,8 @@ import { Slot, useRouter, useSegments } from 'expo-router';
 import { checkAuthState } from '@/redux/authSlice';
 
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 const InitialLayout = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -80,12 +81,14 @@ const RootLayout = () => {
 
   return (
     <Provider store={store}>
-      <GluestackUIProvider mode="light">
-        <ThemeProvider value={DefaultTheme}>
-          <InitialLayout />
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </GluestackUIProvider>
+      <QueryClientProvider client={queryClient}>
+        <GluestackUIProvider mode="light">
+          <ThemeProvider value={DefaultTheme}>
+            <InitialLayout />
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </GluestackUIProvider>
+      </QueryClientProvider>
     </Provider>
   );
 };
