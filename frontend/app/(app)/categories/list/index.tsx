@@ -1,21 +1,29 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import {
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import React from 'react';
 import { Button, ButtonText } from '@/components/ui/button';
 
-import {
-  Category,
-  deleteCategory,
-  getCategories,
-} from '@/services/categoryService';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Category } from '@/services/categoryService';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/utils/types/navigation';
+import {
+  useCategoriesQuery,
+  useDeleteCategoryMutation,
+} from '@/tanstack-query/categories';
 
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
 export default function ListScreen() {
-  const [categories, setCategories] = useState<Category[]>();
   const navigation = useNavigation<ListScreenNavigationProp>();
+
+  const { data: categories, isLoading, isError, error } = useCategoriesQuery();
+  const deleteMutation = useDeleteCategoryMutation();
 
   const handleEditCategory = (category: Category) => {
     navigation.navigate('AddCategory', { category });
@@ -25,31 +33,9 @@ export default function ListScreen() {
     navigation.navigate('AddCategory');
   };
 
-  const handleGetCategories = useCallback(async () => {
-    try {
-      const categories = await getCategories();
-      setCategories(categories);
-    } catch (error) {
-      console.error('Error getting categories', error);
-    }
-  }, []);
-
-  const handleDeleteCategory = async (id: number) => {
-    try {
-      await deleteCategory(id);
-      setTimeout(async () => {
-        await handleGetCategories();
-      }, 1000);
-    } catch (error) {
-      console.error('Error deleting category', error);
-    }
+  const handleDeleteCategory = (id: number) => {
+    deleteMutation.mutate(id);
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      handleGetCategories();
-    }, [handleGetCategories]),
-  );
 
   return (
     <View className="px-4 mt-2">
@@ -74,9 +60,23 @@ export default function ListScreen() {
         </Text>
       </View>
 
+      {isLoading && (
+        <View className="py-4 flex items-center">
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+
+      {isError && (
+        <View className="py-4">
+          <Text className="text-red-500">
+            Error loading categories: {error?.message}
+          </Text>
+        </View>
+      )}
+
       <FlatList
         data={categories}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
         renderItem={({ item }) => (
           <View
             style={{ backgroundColor: item.color }}
@@ -91,10 +91,14 @@ export default function ListScreen() {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={async () => await handleDeleteCategory(item.id ?? 0)}
+                onPress={() => handleDeleteCategory(item.id ?? 0)}
+                disabled={deleteMutation.isPending}
               >
                 <Text className="text-white bg-red-500 border border-red-500 p-2 rounded-lg">
-                  Delete
+                  {deleteMutation.isPending &&
+                  item.id === deleteMutation.variables
+                    ? 'Deleting...'
+                    : 'Delete'}
                 </Text>
               </TouchableOpacity>
             </View>

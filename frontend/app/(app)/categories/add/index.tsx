@@ -1,15 +1,21 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { SearchBar } from '@/components/ui/SearchBar';
-import {
-  Category,
-  createCategory,
-  updateCategory,
-} from '@/services/categoryService';
+import { Category } from '@/services/categoryService';
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import {
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+} from '@/tanstack-query/categories';
 
 type AddCategoryScreenRouteProp = RouteProp<RootStackParamList, 'AddCategory'>;
 
@@ -34,12 +40,15 @@ const getColorLabel = (colorValue: string) => {
 
 export default function AddCategoryScreen() {
   const [formData, setFormData] = useState<formData>({});
-
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
 
   const navigation = useNavigation();
   const route = useRoute<AddCategoryScreenRouteProp>();
+
+  // Use TanStack Query mutations
+  const createMutation = useCreateCategoryMutation();
+  const updateMutation = useUpdateCategoryMutation();
 
   useEffect(() => {
     if (route.params?.category) {
@@ -49,26 +58,39 @@ export default function AddCategoryScreen() {
   }, [route.params]);
 
   const handleCreateOrUpdateCategory = async () => {
-    try {
-      if (editingCategory) {
-        await updateCategory(editingCategory.id!, formData);
-        setEditingCategory(null);
-      } else {
-        await createCategory(formData);
-      }
-      setFormData({});
-
-      navigation.goBack();
-    } catch (error) {
-      console.error('Error creating/updating category', error);
+    if (editingCategory) {
+      updateMutation.mutate(
+        { id: editingCategory.id!, category: formData },
+        {
+          onSuccess: () => {
+            navigation.goBack();
+          },
+        },
+      );
+    } else {
+      createMutation.mutate(formData, {
+        onSuccess: () => {
+          navigation.goBack();
+        },
+      });
     }
   };
+
+  const isLoading = createMutation.isPending || updateMutation.isPending;
+  const error = createMutation.error || updateMutation.error;
 
   return (
     <View className="px-4 mt-2">
       <Text className="text-gray-800 font-semibold text-xl pb-4">
-        Enter a new category
+        {editingCategory ? 'Edit category' : 'Enter a new category'}
       </Text>
+
+      {error && (
+        <View className="mb-4 p-2 bg-red-100 rounded">
+          <Text className="text-red-600">Error: {error.message}</Text>
+        </View>
+      )}
+
       <View className="flex gap-y-2">
         <View className="w-full">
           <SearchBar
@@ -132,10 +154,15 @@ export default function AddCategoryScreen() {
         <Button
           className="p-3 bg-blue-300 rounded-xl"
           onPress={handleCreateOrUpdateCategory}
+          disabled={isLoading}
         >
-          <ButtonText className="font-medium text-sm">
-            {editingCategory ? 'edit' : 'add'}
-          </ButtonText>
+          {isLoading ? (
+            <ActivityIndicator color="#FFFFFF" size="small" />
+          ) : (
+            <ButtonText className="font-medium text-sm">
+              {editingCategory ? 'Edit' : 'Add'}
+            </ButtonText>
+          )}
         </Button>
       </View>
     </View>
