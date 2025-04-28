@@ -13,19 +13,15 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    // Get the full path and method
     const fullPath = req.baseUrl + req.path;
     const method = req.method;
 
-    // Check access level required for this path
     const accessLevel = getAccessLevel(fullPath, method);
 
-    // Allow public routes to pass through
     if (accessLevel === AccessType.Public) {
       return next();
     }
 
-    // Validate auth header format
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('Authentication required');
@@ -34,17 +30,14 @@ export class AuthMiddleware implements NestMiddleware {
     const token = authHeader.substring(7);
 
     try {
-      // Verify token and attach user to request
       const user = this.jwtService.verify(token);
 
       console.log('User:', decodeURIComponent(JSON.stringify(user)));
 
       req['user'] = user;
 
-      // Check if user has sufficient permissions for the requested resource
       switch (accessLevel) {
         case AccessType.User:
-          // Any authenticated user can access USER level resources
           break;
 
         case AccessType.PremiumUser:
@@ -57,7 +50,6 @@ export class AuthMiddleware implements NestMiddleware {
           break;
 
         case AccessType.Admin:
-          // Only admins can access ADMIN resources
           if (user.roles !== Role.Admin) {
             throw new UnauthorizedException('Admin privileges required');
           }
@@ -69,8 +61,6 @@ export class AuthMiddleware implements NestMiddleware {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-
-      // Standardize JWT errors
       if (
         error.name === 'JsonWebTokenError' ||
         error.name === 'TokenExpiredError'

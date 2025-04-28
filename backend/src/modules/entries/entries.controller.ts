@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { EntriesService } from './entries.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
@@ -25,6 +26,13 @@ export class EntriesController {
   @UseGuards(JwtAuthGuard)
   async create(@Body() entryDto: CreateEntryDto): Promise<Entry> {
     return await this.entriesService.create(entryDto);
+  }
+
+  @Get()
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Req() req): Promise<Entry[]> {
+    return await this.entriesService.findAllByUser(req.user.id);
   }
 
   @Get('category/:categoryId')

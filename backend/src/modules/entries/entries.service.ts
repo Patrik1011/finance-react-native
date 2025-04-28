@@ -79,4 +79,11 @@ export class EntriesService {
   async remove(id: number): Promise<void> {
     await this.entryRepository.delete(id);
   }
+
+  async findAllByUser(userId: number): Promise<Entry[]> {
+    return await this.entryRepository.find({
+      where: { category: { user: { id: userId } } },
+      relations: ['category'],
+    });
+  }
 }

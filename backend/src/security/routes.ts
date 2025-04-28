@@ -11,7 +11,6 @@ type RouteAccess = {
   access: AccessType;
 };
 
-// Define routes with RegExp patterns directly
 export const routeAccessMap: RouteAccess[] = [
   { pattern: /^\/auth\/login\/?$/, method: 'POST', access: AccessType.Public },
   { pattern: /^\/auth\/signup\/?$/, method: 'POST', access: AccessType.Public },
@@ -35,15 +34,11 @@ export const routeAccessMap: RouteAccess[] = [
   },
 ];
 
-// Default access level when no route matches
 const DEFAULT_ACCESS = AccessType.User;
 
-// Function to get access level
 export function getAccessLevel(path: string, method: string): AccessType {
-  // Ensure path starts with a forward slash
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
-  // Find the first matching route
   const match = routeAccessMap.find(
     (route) =>
       route.pattern.test(normalizedPath) &&
