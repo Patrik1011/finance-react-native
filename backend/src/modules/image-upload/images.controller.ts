@@ -15,8 +15,10 @@ export class ImagesController {
   @ApiResponse({ status: 200, description: 'Image uploaded successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   async uploadImage(@Body() uploadDto: ImageUploadDto) {
-    const cleanBase64 = this.imageUploadService.cleanBase64Image(uploadDto.image);
-    
+    const cleanBase64 = this.imageUploadService.cleanBase64Image(
+      uploadDto.image,
+    );
+
     const result = await this.imageUploadService.uploadImage(
       cleanBase64,
       uploadDto.format || 'jpg',

@@ -31,7 +31,11 @@ export class ImageUploadService {
         },
       });
 
-      if (response.data && response.data.status_code === 200 && response.data.success) {
+      if (
+        response.data &&
+        response.data.status_code === 200 &&
+        response.data.success
+      ) {
         return {
           success: true,
           url: response.data.image.url,
@@ -39,7 +43,9 @@ export class ImageUploadService {
       } else {
         return {
           success: false,
-          error: 'Image upload failed: ' + (response.data.error?.message || 'Unknown error'),
+          error:
+            'Image upload failed: ' +
+            (response.data.error?.message || 'Unknown error'),
         };
       }
     } catch (error) {

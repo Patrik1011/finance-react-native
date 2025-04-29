@@ -17,7 +17,7 @@ export class EntriesService {
   ) {}
 
   async create(createEntryDto: CreateEntryDto): Promise<Entry> {
-    const { title, amount, categoryId, image} = createEntryDto;
+    const { title, amount, categoryId, image } = createEntryDto;
 
     const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
@@ -30,8 +30,9 @@ export class EntriesService {
     let imageUrl: string | null;
     if (image) {
       const cleanBase64 = this.imageUploadService.cleanBase64Image(image);
-      const uploadResult = await this.imageUploadService.uploadImage(cleanBase64);
-      
+      const uploadResult =
+        await this.imageUploadService.uploadImage(cleanBase64);
+
       if (uploadResult.success) {
         imageUrl = uploadResult.url;
       }

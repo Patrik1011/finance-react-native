@@ -25,21 +25,18 @@ export class AdminService {
     await this.userRepository.delete(id);
   }
 
-  async getAllImageUrls(): Promise<{entryId: number, imageUrl: string}[]> {
+  async getAllImageUrls(): Promise<{ entryId: number; imageUrl: string }[]> {
     const entries = await this.entryRepository.find({
       where: {
-        image_url: Not(IsNull())
+        image_url: Not(IsNull()),
       },
       select: ['id', 'image_url'],
-      order: { id: 'DESC' }
+      order: { id: 'DESC' },
     });
-    
-    return entries.map(entry => ({
+
+    return entries.map((entry) => ({
       entryId: entry.id,
-      imageUrl: entry.image_url
+      imageUrl: entry.image_url,
     }));
   }
-
-
-
 }

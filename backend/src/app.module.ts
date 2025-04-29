@@ -21,7 +21,7 @@ import { ImagesModule } from './modules/image-upload/images.module';
     UsersModule,
     AuthModule,
     AdminModule,
-    ImagesModule
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

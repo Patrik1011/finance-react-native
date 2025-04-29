@@ -36,7 +36,7 @@ export class AdminController {
 
   @Get('images')
   @HttpCode(HttpStatus.OK)
-  async getAllImages(): Promise<{entryId: number, imageUrl: string}[]> {
+  async getAllImages(): Promise<{ entryId: number; imageUrl: string }[]> {
     return this.adminService.getAllImageUrls();
   }
 }
