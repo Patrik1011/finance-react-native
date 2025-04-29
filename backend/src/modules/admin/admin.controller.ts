@@ -33,4 +33,10 @@ export class AdminController {
   async usersDelete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.adminService.deleteUser(id);
   }
+
+  @Get('images')
+  @HttpCode(HttpStatus.OK)
+  async getAllImages(): Promise<{entryId: number, imageUrl: string}[]> {
+    return this.adminService.getAllImageUrls();
+  }
 }
