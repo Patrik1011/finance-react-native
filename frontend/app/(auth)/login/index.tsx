@@ -18,7 +18,7 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     try {
       const result = await dispatch(login({ email, password })).unwrap();
-      
+
       if (result.user && result.user.role === 'ADMIN') {
         router.replace('/(admin)/_admin-layout');
       } else {

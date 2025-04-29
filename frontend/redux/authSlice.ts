@@ -41,7 +41,7 @@ export const login = createAsyncThunk(
       );
 
       await SecureStore.setItemAsync('accessToken', response.accessToken);
-      
+
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Login failed');

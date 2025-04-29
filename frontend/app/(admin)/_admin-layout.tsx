@@ -19,27 +19,27 @@ const tabConfig: TabConfig[] = [
     component: AdminImagesScreen,
   },
   {
-      name: 'Profile',
-      icon: 'person',
-      component: ProfileScreen,
-    },
+    name: 'Profile',
+    icon: 'person',
+    component: ProfileScreen,
+  },
 ];
 
 export default function AdminLayout() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
-    {tabConfig.map((tab) => (
-      <Tab.Screen
-        key={tab.name}
-        name={tab.name}
-        component={tab.component}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name={tab.icon} color={color} size={size} />
-          ),
-        }}
-      />
-    ))}
-  </Tab.Navigator>
+      {tabConfig.map((tab) => (
+        <Tab.Screen
+          key={tab.name}
+          name={tab.name}
+          component={tab.component}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name={tab.icon} color={color} size={size} />
+            ),
+          }}
+        />
+      ))}
+    </Tab.Navigator>
   );
 }

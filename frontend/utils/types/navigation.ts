@@ -7,4 +7,3 @@ export type RootStackParamList = {
   CreateEntry: undefined;
   UpdateEntry: { updatedEntry: Entries };
 };
-

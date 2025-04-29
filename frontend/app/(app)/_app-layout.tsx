@@ -32,20 +32,20 @@ const tabConfig: TabConfig[] = [
 ];
 
 export default function AppLayout() {
-  return(
+  return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
-    {tabConfig.map((tab) => (
-      <Tab.Screen
-        key={tab.name}
-        name={tab.name}
-        component={tab.component}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name={tab.icon} color={color} size={size} />
-          ),
-        }}
-      />
-    ))}
-  </Tab.Navigator>
+      {tabConfig.map((tab) => (
+        <Tab.Screen
+          key={tab.name}
+          name={tab.name}
+          component={tab.component}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name={tab.icon} color={color} size={size} />
+            ),
+          }}
+        />
+      ))}
+    </Tab.Navigator>
   );
 }
