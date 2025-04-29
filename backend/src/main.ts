@@ -16,9 +16,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('finance')
     .addBearerAuth(
-      { 
-        type: 'http', 
-        scheme: 'bearer', 
+      {
+        type: 'http',
+        scheme: 'bearer',
         bearerFormat: 'JWT',
         name: 'JWT',
         description: 'Enter JWT token',
@@ -27,7 +27,7 @@ async function bootstrap() {
       'JWT-auth',
     )
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

@@ -10,6 +10,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { LoggerMiddleware } from './loggers/logger.middleware';
 import { AdminModule } from './modules/admin/admin.module';
+import { ImagesModule } from './modules/image-upload/images.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AdminModule } from './modules/admin/admin.module';
     UsersModule,
     AuthModule,
     AdminModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

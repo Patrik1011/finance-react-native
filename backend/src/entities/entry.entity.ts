@@ -24,4 +24,7 @@ export class Entry {
 
   @Column({ nullable: false })
   category_id: number;
+
+  @Column({ nullable: true })
+  image_url: string;
 }
