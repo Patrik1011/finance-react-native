@@ -17,11 +17,14 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      await dispatch(login({ email, password })).unwrap();
-      // After successful login, redirect to the home page
-      router.replace('/_app-layout');
+      const result = await dispatch(login({ email, password })).unwrap();
+      
+      if (result.user && result.user.role === 'ADMIN') {
+        router.replace('/(admin)/_admin-layout');
+      } else {
+        router.replace('/_app-layout');
+      }
     } catch (error) {
-      // Error is already handled in the slice
       console.error('Login failed:', error);
     }
   };

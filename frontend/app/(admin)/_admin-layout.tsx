@@ -1,9 +1,8 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import EntryListStack from './entries/entry-stack';
-import ListStack from './categories/category-stack';
-import ProfileScreen from './profile';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AdminImagesScreen from './images';
+import ProfileScreen from '../(app)/profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,24 +14,19 @@ type TabConfig = {
 
 const tabConfig: TabConfig[] = [
   {
-    name: 'Entries',
+    name: 'Images',
     icon: 'menu',
-    component: EntryListStack,
+    component: AdminImagesScreen,
   },
   {
-    name: 'Category',
-    icon: 'search',
-    component: ListStack,
-  },
-  {
-    name: 'Profile',
-    icon: 'person',
-    component: ProfileScreen,
-  },
+      name: 'Profile',
+      icon: 'person',
+      component: ProfileScreen,
+    },
 ];
 
-export default function AppLayout() {
-  return(
+export default function AdminLayout() {
+  return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
     {tabConfig.map((tab) => (
       <Tab.Screen
