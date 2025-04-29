@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { Entry } from 'src/entities/entry.entity';
 import { Category } from 'src/entities/category.entity';
+import { ImageUploadService } from '../image-upload/images.services';
 
 @Injectable()
 export class EntriesService {
@@ -12,20 +13,35 @@ export class EntriesService {
     private readonly entryRepository: Repository<Entry>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    private readonly imageUploadService: ImageUploadService,
   ) {}
 
   async create(createEntryDto: CreateEntryDto): Promise<Entry> {
-    const { title, amount, categoryId } = createEntryDto;
+    const { title, amount, categoryId, image} = createEntryDto;
+
     const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
     });
+
     if (!category) {
       throw new Error('Category not found');
     }
+
+    let imageUrl: string | null;
+    if (image) {
+      const cleanBase64 = this.imageUploadService.cleanBase64Image(image);
+      const uploadResult = await this.imageUploadService.uploadImage(cleanBase64);
+      
+      if (uploadResult.success) {
+        imageUrl = uploadResult.url;
+      }
+    }
+
     const entry = this.entryRepository.create({
       title,
       amount,
       category_id: category.id,
+      image_url: imageUrl || null,
     });
     return await this.entryRepository.save(entry);
   }
