@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as SecureStore from 'expo-secure-store';
 import { fetchClient } from '@/services/fetchClient';
+import { Role } from '@/utils/types/enums';
 
 interface User {
   id: number;
   email: string;
+  role: Role;
 }
 
 interface AuthState {
@@ -23,8 +25,6 @@ const initialState: AuthState = {
   isAuthenticated: false,
 };
 
-// Login thunk
-// Login thunk
 export const login = createAsyncThunk(
   'auth/login',
   async (
@@ -32,7 +32,6 @@ export const login = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      // Use fetchClient properly according to its definition
       const response = await fetchClient<{ accessToken: string; user: User }>(
         '/auth/login',
         {
@@ -41,7 +40,6 @@ export const login = createAsyncThunk(
         },
       );
 
-      // Store token in secure storage
       await SecureStore.setItemAsync('accessToken', response.accessToken);
 
       return response;
@@ -51,7 +49,6 @@ export const login = createAsyncThunk(
   },
 );
 
-// Logout thunk
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {

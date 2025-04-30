@@ -5,11 +5,12 @@ import { Entry } from '@/services/entryService';
 import { RootStackParamList } from '@/utils/types/navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import CategoryPickerModal from '@/components/ui/category-picker';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import { addEntry, modifyEntry, removeEntry } from '@/redux/entrySlice';
+import { CameraComponent } from '@/components/ui/camera';
 
 type UpdateEntryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
 
@@ -17,6 +18,7 @@ interface formData {
   title?: string;
   amount?: number;
   categoryId?: number;
+  image?: string;
 }
 
 export default function EntryCreateScreen() {
@@ -24,6 +26,8 @@ export default function EntryCreateScreen() {
   const [categories, setCategories] = useState<Category[] | null>(null);
   const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  const [photo, setPhoto] = useState<{ uri: string } | null>(null);
 
   const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
@@ -40,19 +44,36 @@ export default function EntryCreateScreen() {
 
   const handleCreateOrUpdateCategory = async () => {
     try {
+      const updatedFormData = { ...formData };
+      if (photo) {
+        const base64Image = await fetch(photo.uri)
+          .then((response) => response.blob())
+          .then((blob) => {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          });
+
+        updatedFormData.image = String(base64Image);
+      }
+
       if (editingEntry) {
         await dispatch(
-          modifyEntry({ id: editingEntry.id!, entry: formData }),
+          modifyEntry({ id: editingEntry.id!, entry: updatedFormData }),
         ).unwrap();
         setEditingEntry(null);
       } else {
-        await dispatch(addEntry(formData)).unwrap();
+        await dispatch(addEntry(updatedFormData)).unwrap();
       }
       setFormData({});
+      setPhoto(null);
 
       navigation.goBack();
     } catch (error) {
-      console.error('Error creating/updating category', error);
+      console.error('Error creating/updating entry', error);
     }
   };
 
@@ -78,6 +99,10 @@ export default function EntryCreateScreen() {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  if (showCamera) {
+    return <CameraComponent />;
+  }
 
   return (
     <View className="px-4 mt-2">
@@ -116,14 +141,36 @@ export default function EntryCreateScreen() {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <View className="mt-2 w-full">
+          <TouchableOpacity
+            onPress={() => setShowCamera(true)}
+            className="p-2 border border-gray-300 rounded bg-blue-100"
+          >
+            <Text className="text-center text-blue-700">
+              {photo ? 'Change Photo' : 'Take Photo'}
+            </Text>
+          </TouchableOpacity>
+
+          {photo && (
+            <View className="mt-2 items-center">
+              <Image
+                source={{ uri: photo.uri }}
+                className="w-32 h-32 rounded"
+                resizeMode="cover"
+              />
+            </View>
+          )}
+        </View>
       </View>
-      <View className="mt-2">
+
+      <View className="mt-4">
         <Button
           className="p-3 bg-blue-300 rounded-xl"
           onPress={handleCreateOrUpdateCategory}
         >
           <ButtonText className="font-medium text-sm">
-            {editingEntry ? 'edit' : 'add'}
+            {editingEntry ? 'Edit' : 'Add'} Entry
           </ButtonText>
         </Button>
       </View>

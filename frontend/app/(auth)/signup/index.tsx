@@ -33,7 +33,6 @@ export default function SignupScreen() {
     if (!password.trim()) return 'Password is required';
     if (password !== confirmPassword) return 'Passwords do not match';
 
-    // Simple email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) return 'Please enter a valid email address';
 
@@ -65,7 +64,6 @@ export default function SignupScreen() {
         body: signupData,
       });
 
-      // On successful signup, navigate to login screen
       router.replace('/(auth)/login');
     } catch (err: any) {
       setError(err.message || 'Failed to create account. Please try again.');

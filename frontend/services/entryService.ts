@@ -7,6 +7,8 @@ export interface Entry {
   title?: string;
   amount?: number;
   categoryId?: number;
+  image?: string;
+  image_url?: string;
 }
 
 export interface Entries extends Entry {
@@ -18,12 +20,10 @@ export interface CategoryEntries {
   entries: Entries[];
 }
 
-// Helper function to get the token from SecureStore
 async function getAuthToken(): Promise<string | null> {
   return await SecureStore.getItemAsync('accessToken');
 }
 
-// Create auth headers with the token
 async function createAuthHeaders(): Promise<Record<string, string>> {
   const token = await getAuthToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
