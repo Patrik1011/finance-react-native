@@ -7,7 +7,7 @@ export interface Entry {
   title?: string;
   amount?: number;
   categoryId?: number;
-  image?: string; 
+  image?: string;
   image_url?: string;
 }
 

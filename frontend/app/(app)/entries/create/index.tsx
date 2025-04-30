@@ -47,8 +47,8 @@ export default function EntryCreateScreen() {
       const updatedFormData = { ...formData };
       if (photo) {
         const base64Image = await fetch(photo.uri)
-          .then(response => response.blob())
-          .then(blob => {
+          .then((response) => response.blob())
+          .then((blob) => {
             return new Promise((resolve, reject) => {
               const reader = new FileReader();
               reader.onloadend = () => resolve(reader.result);
@@ -56,7 +56,7 @@ export default function EntryCreateScreen() {
               reader.readAsDataURL(blob);
             });
           });
-          
+
         updatedFormData.image = String(base64Image);
       }
 
@@ -141,7 +141,7 @@ export default function EntryCreateScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-        
+
         <View className="mt-2 w-full">
           <TouchableOpacity
             onPress={() => setShowCamera(true)}
@@ -151,7 +151,7 @@ export default function EntryCreateScreen() {
               {photo ? 'Change Photo' : 'Take Photo'}
             </Text>
           </TouchableOpacity>
-          
+
           {photo && (
             <View className="mt-2 items-center">
               <Image
@@ -163,7 +163,7 @@ export default function EntryCreateScreen() {
           )}
         </View>
       </View>
-      
+
       <View className="mt-4">
         <Button
           className="p-3 bg-blue-300 rounded-xl"

@@ -1,12 +1,20 @@
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useEffect, useRef, useState } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 
 export const CameraComponent = () => {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
-  const [mediaPermission, requestMediaPermission] = MediaLibrary.usePermissions();
+  const [mediaPermission, requestMediaPermission] =
+    MediaLibrary.usePermissions();
   const [photo, setPhoto] = useState<{ uri: string } | null>(null);
 
   const cameraRef = useRef<CameraView | null>(null);
@@ -32,7 +40,7 @@ export const CameraComponent = () => {
   const savePicture = async () => {
     if (photo?.uri) {
       await MediaLibrary.saveToLibraryAsync(photo.uri);
-      setPhoto(null); 
+      setPhoto(null);
     }
   };
 
@@ -68,13 +76,12 @@ export const CameraComponent = () => {
           </View>
         </>
       ) : (
-        <CameraView
-          ref={cameraRef}
-          style={styles.camera}
-          facing={facing}
-        >
+        <CameraView ref={cameraRef} style={styles.camera} facing={facing}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={toggleCameraFacing}
+            >
               <Text style={styles.text}>Flip</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={takePicture}>
@@ -85,7 +92,7 @@ export const CameraComponent = () => {
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
