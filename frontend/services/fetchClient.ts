@@ -2,7 +2,7 @@ type FetchClientOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
 };
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://10.109.130.27:3000';
 
 export async function fetchClient<T = unknown>(
   endpoint: string,
