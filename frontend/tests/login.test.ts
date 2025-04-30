@@ -27,14 +27,17 @@ describe('Auth operations', () => {
 
   describe('login', () => {
     it('should successfully login a user', async () => {
-      const credentials = { email: 'test@example.com', password: 'password123' };
+      const credentials = {
+        email: 'test@example.com',
+        password: 'password123',
+      };
       const mockResponse = {
         accessToken: 'mock-token-12345',
         user: {
           id: 1,
           email: 'test@example.com',
-          role: Role.User
-        }
+          role: Role.User,
+        },
       };
 
       (fetchClient as jest.Mock).mockResolvedValueOnce(mockResponse);
@@ -46,7 +49,10 @@ describe('Auth operations', () => {
         method: 'POST',
         body: credentials,
       });
-      expect(SecureStore.setItemAsync).toHaveBeenCalledWith('accessToken', 'mock-token-12345');
+      expect(SecureStore.setItemAsync).toHaveBeenCalledWith(
+        'accessToken',
+        'mock-token-12345',
+      );
       expect(result).toEqual(mockResponse);
       expect(store.getState().auth.isAuthenticated).toBe(true);
       expect(store.getState().auth.user).toEqual(mockResponse.user);
@@ -55,9 +61,12 @@ describe('Auth operations', () => {
     });
 
     it('should handle login failure correctly', async () => {
-      const credentials = { email: 'test@example.com', password: 'wrongpassword' };
+      const credentials = {
+        email: 'test@example.com',
+        password: 'wrongpassword',
+      };
       const mockError = new Error('Invalid credentials');
-      
+
       (fetchClient as jest.Mock).mockRejectedValueOnce(mockError);
 
       const resultAction = await store.dispatch(login(credentials));
@@ -77,8 +86,8 @@ describe('Auth operations', () => {
         user: {
           id: 2,
           email: 'admin@example.com',
-          role: Role.Admin
-        }
+          role: Role.Admin,
+        },
       };
 
       (fetchClient as jest.Mock).mockResolvedValueOnce(mockResponse);
@@ -90,7 +99,10 @@ describe('Auth operations', () => {
         method: 'POST',
         body: credentials,
       });
-      expect(SecureStore.setItemAsync).toHaveBeenCalledWith('accessToken', 'admin-token-12345');
+      expect(SecureStore.setItemAsync).toHaveBeenCalledWith(
+        'accessToken',
+        'admin-token-12345',
+      );
       expect(result.user.role).toBe(Role.Admin);
       expect(store.getState().auth.isAuthenticated).toBe(true);
     });
@@ -100,12 +112,12 @@ describe('Auth operations', () => {
     it('should successfully logout a user', async () => {
       const mockResponse = {
         accessToken: 'mock-token-12345',
-        user: { id: 1, email: 'test@example.com', role: Role.User }
+        user: { id: 1, email: 'test@example.com', role: Role.User },
       };
       store = setupStore();
-      store.dispatch({ 
-        type: 'auth/login/fulfilled', 
-        payload: mockResponse 
+      store.dispatch({
+        type: 'auth/login/fulfilled',
+        payload: mockResponse,
       });
 
       await store.dispatch(logout());
