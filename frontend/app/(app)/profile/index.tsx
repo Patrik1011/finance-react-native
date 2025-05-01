@@ -21,7 +21,7 @@ export default function ProfileScreen() {
     },
     onError: () => {
       Alert.alert('Error', 'Failed to upgrade account. Please try again.');
-    }
+    },
   });
 
   const downgradeUserMutation = useMutation({
@@ -32,7 +32,7 @@ export default function ProfileScreen() {
     },
     onError: () => {
       Alert.alert('Error', 'Failed to downgrade account. Please try again.');
-    }
+    },
   });
 
   const handleLogout = () => {
@@ -50,23 +50,30 @@ export default function ProfileScreen() {
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Downgrade', 
+          text: 'Downgrade',
           style: 'destructive',
-          onPress: () => downgradeUserMutation.mutate()
-        }
-      ]
+          onPress: () => downgradeUserMutation.mutate(),
+        },
+      ],
     );
   };
 
   return (
     <View className="flex-1 p-4 mt-20">
       <View className="mb-8">
-        <Text className="text-2xl font-bold mb-4 text-typography-900">Profile</Text>
+        <Text className="text-2xl font-bold mb-4 text-typography-900">
+          Profile
+        </Text>
         {user && (
           <View className="mb-4">
-            <Text className="text-base mb-2 text-black">Email: {user.email}</Text>
             <Text className="text-base mb-2 text-black">
-              Account Type: {user.role === Role.PremiumUser ? 'Premium subscription' : 'Basic subscription'}
+              Email: {user.email}
+            </Text>
+            <Text className="text-base mb-2 text-black">
+              Account Type:{' '}
+              {user.role === Role.PremiumUser
+                ? 'Premium subscription'
+                : 'Basic subscription'}
             </Text>
           </View>
         )}
@@ -80,7 +87,9 @@ export default function ProfileScreen() {
             className="bg-warning-500 rounded-lg"
           >
             <ButtonText className="text-white p-2">
-              {downgradeUserMutation.isPending ? 'Processing...' : 'Downgrade to Basic'}
+              {downgradeUserMutation.isPending
+                ? 'Processing...'
+                : 'Downgrade to Basic'}
             </ButtonText>
           </Button>
         ) : (
@@ -90,15 +99,14 @@ export default function ProfileScreen() {
             className="bg-primary-500 rounded-lg"
           >
             <ButtonText className="text-white">
-              {upgradeUserMutation.isPending ? 'Processing...' : 'Upgrade to Premium'}
+              {upgradeUserMutation.isPending
+                ? 'Processing...'
+                : 'Upgrade to Premium'}
             </ButtonText>
           </Button>
         )}
 
-        <Button
-          onPress={handleLogout}
-          className="bg-error-500 rounded-lg"
-        >
+        <Button onPress={handleLogout} className="bg-error-500 rounded-lg">
           <ButtonText className="text-white">Logout</ButtonText>
         </Button>
       </View>

@@ -89,13 +89,13 @@ export default function ListScreen() {
             <Text className="text-gray-800">{item.title}</Text>
             <Text className="text-gray-800">{item.description}</Text>
             <View className="flex-row gap-x-2">
-            {user?.role === Role.PremiumUser && (
-              <TouchableOpacity onPress={() => handleEditCategory(item)}>
-                <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
-                  Edit
-                </Text>
-              </TouchableOpacity>
-  )}
+              {user?.role === Role.PremiumUser && (
+                <TouchableOpacity onPress={() => handleEditCategory(item)}>
+                  <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
+                    Edit
+                  </Text>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 onPress={() => handleDeleteCategory(item.id ?? 0)}
                 disabled={deleteMutation.isPending}

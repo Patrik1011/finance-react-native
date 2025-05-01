@@ -33,7 +33,7 @@ export default function EntryCreateScreen() {
   const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<UpdateEntryScreenRouteProp>();
-    const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const fetchCategories = async () => {
     try {
@@ -173,7 +173,9 @@ export default function EntryCreateScreen() {
               className="p-3 bg-gray-300 rounded-xl opacity-50"
               disabled={true}
             >
-              <ButtonText className="font-medium text-sm">Edit Entry</ButtonText>
+              <ButtonText className="font-medium text-sm">
+                Edit Entry
+              </ButtonText>
             </Button>
             <Text className="text-red-500 text-xs mt-1 text-center">
               Upgrade to premium to edit entries
