@@ -7,10 +7,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import CategoryPickerModal from '@/components/ui/category-picker';
-import { AppDispatch } from '@/redux/store';
-import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { addEntry, modifyEntry, removeEntry } from '@/redux/entrySlice';
 import { CameraComponent } from '@/components/ui/camera';
+import { Role } from '@/utils/types/enums';
 
 type UpdateEntryScreenRouteProp = RouteProp<RootStackParamList, 'UpdateEntry'>;
 
@@ -32,6 +33,7 @@ export default function EntryCreateScreen() {
   const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<UpdateEntryScreenRouteProp>();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const fetchCategories = async () => {
     try {
@@ -165,16 +167,31 @@ export default function EntryCreateScreen() {
       </View>
 
       <View className="mt-4">
-        <Button
-          className="p-3 bg-blue-300 rounded-xl"
-          onPress={handleCreateOrUpdateCategory}
-        >
-          <ButtonText className="font-medium text-sm">
-            {editingEntry ? 'Edit' : 'Add'} Entry
-          </ButtonText>
-        </Button>
+        {editingEntry && user?.role != Role.PremiumUser ? (
+          <View>
+            <Button
+              className="p-3 bg-gray-300 rounded-xl opacity-50"
+              disabled={true}
+            >
+              <ButtonText className="font-medium text-sm">
+                Edit Entry
+              </ButtonText>
+            </Button>
+            <Text className="text-red-500 text-xs mt-1 text-center">
+              Upgrade to premium to edit entries
+            </Text>
+          </View>
+        ) : (
+          <Button
+            className="p-3 bg-blue-300 rounded-xl"
+            onPress={handleCreateOrUpdateCategory}
+          >
+            <ButtonText className="font-medium text-sm">
+              {editingEntry ? 'Edit' : 'Add'} Entry
+            </ButtonText>
+          </Button>
+        )}
       </View>
-
       <CategoryPickerModal
         visible={modalVisible}
         categories={categories || []}

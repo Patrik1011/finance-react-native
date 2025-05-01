@@ -1,7 +1,7 @@
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import AdminImagesScreen from './images';
+import AdminImagesScreen from './image-list';
 import ProfileScreen from '../(app)/profile';
 
 const Tab = createBottomTabNavigator();
