@@ -37,7 +37,7 @@ const InitialLayout = () => {
   useEffect(() => {
     if (loading) return;
 
-    // Check if the current path includes the auth group
+    // current path includes the auth group
     const inAuthGroup =
       segments.includes('(auth)') ||
       segments.some((segment) => segment === 'login');

@@ -33,7 +33,6 @@ export function useCreateCategoryMutation() {
   });
 }
 
-// Update category mutation hook
 export function useUpdateCategoryMutation() {
   const queryClient = useQueryClient();
 

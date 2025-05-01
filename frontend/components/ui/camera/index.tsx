@@ -56,14 +56,14 @@ export const CameraComponent = () => {
     return <View />;
   }
 
-  // if (!permission.granted || !mediaPermission.granted) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text style={styles.message}>We need permission to access camera and media library</Text>
-  //       <Button onPress={requestAllPermissions} title="Grant Permissions" />
-  //     </View>
-  //   );
-  // }
+  if (!permission.granted || !mediaPermission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>We need permission to access camera and media library</Text>
+        <Button onPress={requestAllPermissions} title="Grant Permissions" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

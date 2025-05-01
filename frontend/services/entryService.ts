@@ -1,6 +1,6 @@
 import { fetchClient } from '@/services/fetchClient';
 import { Category } from './categoryService';
-import * as SecureStore from 'expo-secure-store';
+import { createAuthHeaders } from './common';
 
 export interface Entry {
   id?: number;
@@ -18,15 +18,6 @@ export interface Entries extends Entry {
 export interface CategoryEntries {
   category: Category;
   entries: Entries[];
-}
-
-async function getAuthToken(): Promise<string | null> {
-  return await SecureStore.getItemAsync('accessToken');
-}
-
-async function createAuthHeaders(): Promise<Record<string, string>> {
-  const token = await getAuthToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 export async function getEntries(): Promise<Entries[]> {

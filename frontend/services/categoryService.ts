@@ -1,23 +1,11 @@
 import { fetchClient } from '@/services/fetchClient';
-import * as SecureStore from 'expo-secure-store';
+import { createAuthHeaders } from './common';
 
 export interface Category {
   id?: number;
   title?: string;
   description?: string;
   color?: string;
-}
-
-// Helper function to get the token from SecureStore
-async function getAuthToken(): Promise<string | null> {
-  // Get the token from SecureStore
-  return await SecureStore.getItemAsync('accessToken');
-}
-
-// Create auth headers with the token
-async function createAuthHeaders(): Promise<Record<string, string>> {
-  const token = await getAuthToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 export async function getCategories(): Promise<Category[]> {
