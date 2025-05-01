@@ -14,6 +14,7 @@ import CategoryPickerModal from '@/components/ui/category-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/redux/store';
 import { fetchEntries } from '@/redux/entrySlice';
+import { Role } from '@/utils/types/enums';
 
 type ListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'List'>;
 
@@ -97,6 +98,7 @@ export default function EntryListScreen() {
         <Text className="text-gray-800">{item.category?.title}</Text>
       </View>
 
+    {/* {user?.role === Role.PremiumUser && ( */}
       <View className="flex-row gap-x-2">
         <TouchableOpacity onPress={() => handleEditEntry(item)}>
           <Text className="text-white bg-green-500 border-green-500 py-2 px-3 rounded-lg">
@@ -104,6 +106,7 @@ export default function EntryListScreen() {
           </Text>
         </TouchableOpacity>
       </View>
+      {/* )} */}
     </View>
   );
 
