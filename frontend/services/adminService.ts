@@ -1,5 +1,4 @@
 import { fetchClient } from '@/services/fetchClient';
-import * as SecureStore from 'expo-secure-store';
 import { createAuthHeaders } from './common';
 
 export interface AdminImage {
